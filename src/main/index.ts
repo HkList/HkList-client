@@ -1,4 +1,5 @@
-import { app, type BrowserWindow } from 'electron'
+import { app } from 'electron'
+import type { windows } from '@main/loader.ts'
 
 import setAppUserModelId from '@main/init/setAppUserModelId.ts'
 import preventF12 from '@main/init/preventF12.ts'
@@ -10,10 +11,10 @@ app.whenReady().then(async () => {
   setAppUserModelId(app)
   preventF12(app)
 
-  let mainWindow: BrowserWindow | undefined = undefined
+  let windows: windows = {}
 
-  window(app, mainWindow)
+  window(app, windows)
 
-  mainWindow = await createWindow(app)
+  windows.main = await createWindow(app)
   macos(app)
 })

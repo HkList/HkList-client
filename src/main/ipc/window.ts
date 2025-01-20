@@ -1,25 +1,25 @@
 import { defineIpcLoader } from '@main/loader.ts'
 import { ipcMain } from 'electron'
 
-export default defineIpcLoader((app, window) => {
+export default defineIpcLoader((app, windows) => {
   ipcMain.handle('window.minimize', () => {
-    if (!window) return
-    window.minimize()
+    if (!windows.main) return
+    windows.main.minimize()
   })
 
   ipcMain.handle('window.maximize', () => {
-    if (!window) return
-    window.maximize()
+    if (!windows.main) return
+    windows.main.maximize()
   })
 
   ipcMain.handle('window.unMaximize', () => {
-    if (!window) return
-    window.unmaximize()
+    if (!windows.main) return
+    windows.main.unmaximize()
   })
 
   ipcMain.handle('window.isMaximized', () => {
-    if (!window) return
-    return window.isMaximized()
+    if (!windows.main) return
+    return windows.main.isMaximized()
   })
 
   ipcMain.handle('window.close', () => {

@@ -22,7 +22,9 @@
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
-    "@electron-toolkit/utils": "^3.0.0",
+    "@electron-toolkit/utils": "^3.0.0"
+  },
+  "devDependencies": {
     "@fingerprintjs/fingerprintjs": "^4.5.1",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
@@ -36,9 +38,7 @@
     "tdesign-vue-next": "^1.10.6",
     "vue": "^3.5.13",
     "vue-i18n": "^11.0.1",
-    "vue-router": "^4.5.0"
-  },
-  "devDependencies": {
+    "vue-router": "^4.5.0",
     "@electron-toolkit/eslint-config": "^1.0.2",
     "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",

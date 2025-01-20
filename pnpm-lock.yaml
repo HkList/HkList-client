@@ -14,48 +14,6 @@ importers:
       '@electron-toolkit/utils':
         specifier: ^3.0.0
         version: 3.0.0(electron@34.0.0)
-      '@fingerprintjs/fingerprintjs':
-        specifier: ^4.5.1
-        version: 4.5.1
-      axios:
-        specifier: ^1.7.9
-        version: 1.7.9
-      dayjs:
-        specifier: ^1.11.13
-        version: 1.11.13
-      electron:
-        specifier: ^34.0.0
-        version: 34.0.0
-      electron-updater:
-        specifier: ^6.3.9
-        version: 6.3.9
-      js-sha1:
-        specifier: ^0.7.0
-        version: 0.7.0
-      nprogress:
-        specifier: ^0.2.0
-        version: 0.2.0
-      pinia:
-        specifier: ^2.3.0
-        version: 2.3.0(typescript@5.7.3)(vue@3.5.13(typescript@5.7.3))
-      qs:
-        specifier: ^6.14.0
-        version: 6.14.0
-      tdesign-icons-vue-next:
-        specifier: ^0.3.4
-        version: 0.3.4(vue@3.5.13(typescript@5.7.3))
-      tdesign-vue-next:
-        specifier: ^1.10.6
-        version: 1.10.6(vue@3.5.13(typescript@5.7.3))
-      vue:
-        specifier: ^3.5.13
-        version: 3.5.13(typescript@5.7.3)
-      vue-i18n:
-        specifier: ^11.0.1
-        version: 11.0.1(vue@3.5.13(typescript@5.7.3))
-      vue-router:
-        specifier: ^4.5.0
-        version: 4.5.0(vue@3.5.13(typescript@5.7.3))
     devDependencies:
       '@electron-toolkit/eslint-config':
         specifier: ^1.0.2
@@ -66,6 +24,9 @@ importers:
       '@electron-toolkit/tsconfig':
         specifier: ^1.0.1
         version: 1.0.1(@types/node@22.10.7)
+      '@fingerprintjs/fingerprintjs':
+        specifier: ^4.5.1
+        version: 4.5.1
       '@rushstack/eslint-patch':
         specifier: ^1.10.5
         version: 1.10.5
@@ -90,9 +51,21 @@ importers:
       '@vue/eslint-config-typescript':
         specifier: ^14.3.0
         version: 14.3.0(eslint-plugin-vue@9.32.0(eslint@8.57.1))(eslint@8.57.1)(typescript@5.7.3)
+      axios:
+        specifier: ^1.7.9
+        version: 1.7.9
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
+      electron:
+        specifier: ^34.0.0
+        version: 34.0.0
       electron-builder:
         specifier: ^25.1.8
         version: 25.1.8(electron-builder-squirrel-windows@24.13.3)
+      electron-updater:
+        specifier: ^6.3.9
+        version: 6.3.9
       electron-vite:
         specifier: ^2.3.0
         version: 2.3.0(vite@6.0.7(@types/node@22.10.7)(sass-embedded@1.83.4)(tsx@4.19.2))
@@ -102,15 +75,33 @@ importers:
       eslint-plugin-vue:
         specifier: ^9.26.0
         version: 9.32.0(eslint@8.57.1)
+      js-sha1:
+        specifier: ^0.7.0
+        version: 0.7.0
       nodemon:
         specifier: ^3.1.9
         version: 3.1.9
+      nprogress:
+        specifier: ^0.2.0
+        version: 0.2.0
+      pinia:
+        specifier: ^2.3.0
+        version: 2.3.0(typescript@5.7.3)(vue@3.5.13(typescript@5.7.3))
       prettier:
         specifier: ^3.4.2
         version: 3.4.2
+      qs:
+        specifier: ^6.14.0
+        version: 6.14.0
       sass-embedded:
         specifier: ^1.83.4
         version: 1.83.4
+      tdesign-icons-vue-next:
+        specifier: ^0.3.4
+        version: 0.3.4(vue@3.5.13(typescript@5.7.3))
+      tdesign-vue-next:
+        specifier: ^1.10.6
+        version: 1.10.6(vue@3.5.13(typescript@5.7.3))
       tsx:
         specifier: ^4.19.2
         version: 4.19.2
@@ -126,6 +117,15 @@ importers:
       vite:
         specifier: ^6.0.7
         version: 6.0.7(@types/node@22.10.7)(sass-embedded@1.83.4)(tsx@4.19.2)
+      vue:
+        specifier: ^3.5.13
+        version: 3.5.13(typescript@5.7.3)
+      vue-i18n:
+        specifier: ^11.0.1
+        version: 11.0.1(vue@3.5.13(typescript@5.7.3))
+      vue-router:
+        specifier: ^4.5.0
+        version: 4.5.0(vue@3.5.13(typescript@5.7.3))
       vue-tsc:
         specifier: ^2.2.0
         version: 2.2.0(typescript@5.7.3)

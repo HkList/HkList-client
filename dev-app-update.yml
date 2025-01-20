@@ -1,0 +1,6 @@
+provider: github
+owner: huankong233
+repo: HkList-client
+private: false
+releaseType: release
+updaterCacheDirName: hklist-client-updater

@@ -34,6 +34,7 @@ export default defineConfig({
     resolve: {
       alias: {
         '@': resolve('./'),
+        '@main': resolve('./src/main'),
         '@renderer': resolve('./src/renderer/src')
       }
     }

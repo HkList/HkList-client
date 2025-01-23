@@ -3,13 +3,15 @@
 </template>
 
 <script setup lang="ts">
+import { useConfigStore } from '@renderer/stores/config.ts'
+import { getRandomColor } from '@renderer/utils/random.ts'
 import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
-import { useDark } from '@renderer/utils/use/useDark.ts'
-import { getRandomColor } from '@renderer/utils/random.ts'
+
+const configStore = useConfigStore()
 
 onMounted(() => {
-  useDark()
+  configStore.getConfig()
 
   // 小彩蛋
   console.info(

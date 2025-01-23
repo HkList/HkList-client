@@ -1,15 +1,12 @@
-import { useRouter } from 'vue-router'
-import { ref } from 'vue'
 import { type MenuProps } from 'tdesign-vue-next'
+import { ref, type Ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-export const useSelectMenu = (jumpPath: string, defaultValue: string) => {
+export const useSelectMenu = (): [Ref<string, string>, MenuProps['onChange']] => {
   const router = useRouter()
-  const selectedMenu = ref(defaultValue)
-  if (router.currentRoute.value.path.includes(jumpPath)) {
-    selectedMenu.value =
-      router.currentRoute.value.path.split(jumpPath).pop()?.slice(1) || defaultValue
-  }
-  const changeMenu: MenuProps['onChange'] = (value) => {
+  const selectedMenu = ref(router.currentRoute.value.path)
+
+  const changeMenu: MenuProps['onChange'] = async (value) => {
     value = value.toString()
 
     if (value.includes('link')) {
@@ -17,12 +14,12 @@ export const useSelectMenu = (jumpPath: string, defaultValue: string) => {
       return
     }
 
-    selectedMenu.value = value
-    if (jumpPath === '') {
-      router.push({ path: `/${value}` })
-    } else {
-      router.push({ path: `/${jumpPath}/${value}` })
-    }
+    const prev = router.currentRoute.value.path
+    await router.push({ path: value })
+
+    if (router.currentRoute.value.path === value) selectedMenu.value = value
+    else selectedMenu.value = prev
   }
+
   return [selectedMenu, changeMenu]
 }

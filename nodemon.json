@@ -1,5 +1,5 @@
 {
-  "watch": ["./src"],
+  "watch": ["./src/main", "./src/preload"],
   "ext": ".ts",
   "ignore": [],
   "exec": "electron-vite dev"

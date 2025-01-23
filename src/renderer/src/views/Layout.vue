@@ -36,51 +36,35 @@
 </template>
 
 <script lang="ts" setup>
-import { useSelectMenu } from '@renderer/utils/use/useSelectMenu.ts'
 import logo from '@/resources/icon.png'
-import { CloseIcon, FullscreenExit1Icon, Fullscreen1Icon, MinusIcon } from 'tdesign-icons-vue-next'
-import { onMounted, onUnmounted, ref } from 'vue'
 import {
-  minimize,
+  isMaximized as _isMaximized,
   maximize as _maximize,
   unmaximize as _unmaximize,
   close,
-  isMaximized as _isMaximized
+  minimize
 } from '@renderer/api/window.ts'
+import { useSelectMenu } from '@renderer/utils/use/useSelectMenu.ts'
+import { CloseIcon, Fullscreen1Icon, FullscreenExit1Icon, MinusIcon } from 'tdesign-icons-vue-next'
+import { onMounted, onUnmounted, ref } from 'vue'
 
-const params = defineProps({
-  jumpPath: {
-    type: String,
-    required: true
-  },
-  defaultValue: {
-    type: String,
-    required: true
-  }
-})
-
-const [selectedMenu, changeMenu] = useSelectMenu(params.jumpPath, params.defaultValue)
+const [selectedMenu, changeMenu] = useSelectMenu()
 
 const isMaximized = ref(false)
 
+const sizeChange = async () => (isMaximized.value = await _isMaximized())
+
 onMounted(async () => {
   isMaximized.value = await _isMaximized()
-
-  window.onresize = async () => {
-    isMaximized.value = await _isMaximized()
-  }
+  window.addEventListener('resize', sizeChange)
 })
 
 onUnmounted(() => {
-  window.onresize = null
+  window.removeEventListener('resize', sizeChange)
 })
 
 const switchMaximize = async () => {
-  if (isMaximized.value) {
-    await _unmaximize()
-  } else {
-    await _maximize()
-  }
+  await (isMaximized.value ? _unmaximize() : _maximize())
   isMaximized.value = !isMaximized.value
 }
 </script>

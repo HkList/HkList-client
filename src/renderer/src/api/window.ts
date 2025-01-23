@@ -1,4 +1,4 @@
-import { invoke } from '@renderer/utils/invoke.js'
+import { invoke } from '@renderer/utils/invoke.ts'
 
 export const close = () => invoke('window.close')
 

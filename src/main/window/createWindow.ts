@@ -54,12 +54,9 @@ export default defineWindowLoader(() => {
   }
 
   mainWindow.on('ready-to-show', () => {
-    if (is.dev) {
-      mainWindow.showInactive()
-      return
-    }
-
     mainWindow.show()
+
+    if (is.dev) return
 
     // 检查更新
     autoUpdater.checkForUpdatesAndNotify({

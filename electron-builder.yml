@@ -2,6 +2,8 @@ appId: com.hklist.client
 productName: hklist-client
 directories:
   buildResources: build
+extraFiles:
+  - 'aria2'
 files:
   - '!**/.vscode/*'
   - '!src/*'

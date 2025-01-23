@@ -6,15 +6,20 @@ import preventF12 from '@main/init/preventF12.ts'
 import macos from '@main/init/macos.ts'
 import createWindow from '@main/window/createWindow.ts'
 import window from '@main/ipc/window.ts'
+import config from '@main/ipc/config.ts'
+import parse from '@main/ipc/parse.ts'
 
 app.whenReady().then(async () => {
-  setAppUserModelId(app)
-  preventF12(app)
+  await setAppUserModelId()
+  await preventF12()
 
   let windows: windows = {}
 
-  window(app, windows)
+  window(windows)
+  config(windows)
+  parse(windows)
 
-  windows.main = await createWindow(app)
-  macos(app)
+  windows.main = await createWindow()
+
+  macos()
 })

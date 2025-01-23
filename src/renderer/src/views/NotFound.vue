@@ -27,9 +27,9 @@
 </template>
 
 <script setup lang="ts">
+import qrcode from '@/resources/qrcode.png'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import qrcode from '@/resources/qrcode.png'
 
 const router = useRouter()
 const complete = ref(0)

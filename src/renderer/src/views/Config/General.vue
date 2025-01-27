@@ -25,12 +25,15 @@
 <script lang="ts" setup>
 import packageJson from '@/package.json'
 import { useConfigStore } from '@renderer/stores/config.ts'
-import { storeToRefs } from 'pinia'
-import { FormProps, MessagePlugin } from 'tdesign-vue-next'
 import { useSaveFirst } from '@renderer/utils/use/useSaveFirst.ts'
+import { storeToRefs } from 'pinia'
+import type { FormProps } from 'tdesign-vue-next'
+import { MessagePlugin } from 'tdesign-vue-next'
 
 const configStore = useConfigStore()
 const { config } = storeToRefs(configStore)
+
+const [haveChanged, triggerChange] = useSaveFirst()
 
 const formRules: FormProps['rules'] = {
   theme: [{ required: true, message: '请选择主题设置' }]
@@ -43,8 +46,6 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
   haveChanged.value = false
   MessagePlugin.success('保存成功')
 }
-
-const [haveChanged, triggerChange] = useSaveFirst()
 </script>
 
 <style lang="scss" scoped></style>

@@ -1,11 +1,14 @@
-import { invoke } from '@renderer/utils/invoke.ts'
+import type { isMaximized } from '@main/ipc/window.ts'
+import { defineInvoke } from '@renderer/utils/invoke.ts'
 
-export const close = () => invoke('window.close')
+export const close = defineInvoke('window.close')
 
-export const minimize = () => invoke('window.minimize')
+export const minimize = defineInvoke('window.minimize')
 
-export const maximize = () => invoke('window.maximize')
+export const maximize = defineInvoke('window.maximize')
 
-export const unmaximize = () => invoke('window.unMaximize')
+export const unmaximize = defineInvoke('window.unMaximize')
 
-export const isMaximized = () => invoke<boolean>('window.isMaximized')
+export type { isMaximized }
+
+export const getIsMaximized = defineInvoke<null, isMaximized>('window.getIsMaximized')

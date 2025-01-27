@@ -1,8 +1,8 @@
 import type { BaseResponse } from '@main/utils/response.ts'
-import { MessagePlugin } from 'tdesign-vue-next'
 import NProgress from '@renderer/utils/progress.ts'
+import { MessagePlugin } from 'tdesign-vue-next'
 
-export const invoke = async <T = void>(method: string, data = {}) => {
+export const invoke = async <T = void>(method: string, data: unknown = null): Promise<T> => {
   NProgress.start()
   const res = (await window.ElectronAPI.ipcRenderer.invoke(method, data)) as BaseResponse<T>
   NProgress.done()
@@ -13,3 +13,8 @@ export const invoke = async <T = void>(method: string, data = {}) => {
     return Promise.reject(res)
   }
 }
+
+export const defineInvoke =
+  <T = void, K = void>(method: string) =>
+  (data?: T) =>
+    invoke<K>(method, data)

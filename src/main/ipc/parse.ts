@@ -1,4 +1,4 @@
-import { defineIpcLoader } from '@main/loader.ts'
+import { defineLoader } from '@main/loader.ts'
 import { defineIpcHandle } from '@main/utils/defineIpcHandle.ts'
 import { getUrl } from '@main/utils/getUrl.ts'
 import { hkListHttp } from '@main/utils/http.ts'
@@ -29,7 +29,7 @@ export interface GetConfigRes {
   have_account: boolean
 }
 
-export default defineIpcLoader(() => {
+export default defineLoader(() => {
   /** 获取当前卡密信息 */
   defineIpcHandle('parse.getLimit', async (_, params: GetLimitReq) => {
     return await hkListHttp.request<GetLimitRes>('get', getUrl('/user/parse/limit'), { params })

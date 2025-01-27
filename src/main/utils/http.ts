@@ -1,7 +1,8 @@
 import run from '@main/utils/fingerprint.js'
-import { fail, success, type BaseResponse } from '@main/utils/response.ts'
+import type { BaseResponse } from '@main/utils/response.ts'
+import { fail, success } from '@main/utils/response.ts'
 import type { AxiosInstance, AxiosRequestConfig, CustomParamsSerializer, Method } from 'axios'
-import Axios from 'axios'
+import axios from 'axios'
 import { stringify } from 'qs'
 
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
@@ -20,7 +21,7 @@ const defaultConfig: AxiosRequestConfig = {
 }
 
 class Http {
-  public axiosInstance: AxiosInstance = Axios.create(defaultConfig)
+  public axiosInstance: AxiosInstance = axios.create(defaultConfig)
   public isHkList: boolean = false
 
   constructor(isHkList = false) {

@@ -4,10 +4,6 @@ export type windows = {
   main?: BrowserWindow
 }
 
-export type initLoader = () => Promise<void> | void
-export type windowLoader = () => Promise<BrowserWindow> | BrowserWindow
-export type ipcLoader = (windows: windows) => Promise<void> | void
+export type loader<T> = (windows: windows) => Promise<T> | T
 
-export const defineInitLoader = (loader: initLoader) => loader
-export const defineWindowLoader = (loader: windowLoader) => loader
-export const defineIpcLoader = (loader: ipcLoader) => loader
+export const defineLoader = <T = void>(loader: loader<T>) => loader

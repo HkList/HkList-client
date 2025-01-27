@@ -2,6 +2,19 @@
 
 ## 2025
 
+### 01-28 v0.0.1
+
+- [*] 临时移除 eslint
+  - devDependencies:
+  - @electron-toolkit/eslint-config 1.0.2
+  - @electron-toolkit/eslint-config-ts 3.0.0-beta.0
+  - @eslint/js 9.19.0
+  - @vue/eslint-config-prettier 10.2.0
+  - @vue/eslint-config-typescript 14.3.0
+  - eslint 9.19.0
+  - eslint-plugin-vue 9.32.0
+- [+] 增加 aria2 配置
+
 ### 01-24 v0.0.1
 
 - [+] 固定主线程到渲染线程沟通格式

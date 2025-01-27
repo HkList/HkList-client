@@ -1,10 +1,5 @@
-import {
-  getLimit as _getLimit,
-  GetLimitReq,
-  GetLimitRes,
-  getConfig as _getConfig,
-  GetConfigRes
-} from '@renderer/api/parse.ts'
+import type { GetConfigRes, GetLimitReq, GetLimitRes } from '@renderer/api/parse.ts'
+import { getConfig as getConfigApi, getLimit as getLimitApi } from '@renderer/api/parse.ts'
 import { defineStore } from 'pinia'
 import { ref, toRaw } from 'vue'
 
@@ -21,7 +16,7 @@ export const useParseStore = defineStore('parse', () => {
 
   const getLimit = async () => {
     try {
-      const res = await _getLimit(toRaw(GetLimitReq.value))
+      const res = await getLimitApi(toRaw(GetLimitReq.value))
       GetLimitRes.value = res
       GetLimitError.value = ''
       localStorage.setItem('token', GetLimitReq.value.token)
@@ -49,7 +44,7 @@ export const useParseStore = defineStore('parse', () => {
     have_account: false
   })
   const getConfig = async () => {
-    const res = await _getConfig()
+    const res = await getConfigApi()
     GetConfigRes.value = res
   }
 

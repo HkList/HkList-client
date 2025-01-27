@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'node:fs'
 
 const info = fs
   .readFileSync('./src/main/utils/http.ts', { encoding: 'utf-8' })

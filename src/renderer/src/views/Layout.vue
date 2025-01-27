@@ -11,7 +11,7 @@
             <MinusIcon />
           </t-button>
           <t-button theme="default" @click="switchMaximize">
-            <Fullscreen1Icon v-if="!isMaximized" />
+            <Fullscreen1Icon v-if="!isMaximized.isMaximized" />
             <FullscreenExit1Icon v-else />
           </t-button>
           <t-button theme="default" @click="close">
@@ -37,25 +37,22 @@
 
 <script lang="ts" setup>
 import logo from '@/resources/icon.png'
-import {
-  isMaximized as _isMaximized,
-  maximize as _maximize,
-  unmaximize as _unmaximize,
-  close,
-  minimize
-} from '@renderer/api/window.ts'
+import type { isMaximized } from '@renderer/api/window.ts'
+import { close, getIsMaximized, maximize, minimize, unmaximize } from '@renderer/api/window.ts'
 import { useSelectMenu } from '@renderer/utils/use/useSelectMenu.ts'
 import { CloseIcon, Fullscreen1Icon, FullscreenExit1Icon, MinusIcon } from 'tdesign-icons-vue-next'
 import { onMounted, onUnmounted, ref } from 'vue'
 
 const [selectedMenu, changeMenu] = useSelectMenu()
 
-const isMaximized = ref(false)
+const isMaximized = ref<isMaximized>({
+  isMaximized: false
+})
 
-const sizeChange = async () => (isMaximized.value = await _isMaximized())
+const sizeChange = async () => (isMaximized.value = await getIsMaximized())
 
 onMounted(async () => {
-  isMaximized.value = await _isMaximized()
+  isMaximized.value = await getIsMaximized()
   window.addEventListener('resize', sizeChange)
 })
 
@@ -64,8 +61,8 @@ onUnmounted(() => {
 })
 
 const switchMaximize = async () => {
-  await (isMaximized.value ? _unmaximize() : _maximize())
-  isMaximized.value = !isMaximized.value
+  await (isMaximized.value ? unmaximize() : maximize())
+  isMaximized.value.isMaximized = !isMaximized.value.isMaximized
 }
 </script>
 

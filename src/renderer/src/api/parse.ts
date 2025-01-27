@@ -1,15 +1,10 @@
-import type {
-  GetLimitReq as _GetLimitReq,
-  GetLimitRes as _GetLimitRes,
-  GetConfigRes as _GetConfigRes
-} from '@main/ipc/parse.ts'
-import { invoke } from '@renderer/utils/invoke.ts'
+import type { GetConfigRes, GetLimitReq, GetLimitRes } from '@main/ipc/parse.ts'
+import { defineInvoke } from '@renderer/utils/invoke.ts'
 
-export type GetConfigRes = _GetConfigRes
+export type { GetConfigRes }
 
-export const getConfig = () => invoke<GetConfigRes>('parse.getConfig')
+export const getConfig = defineInvoke<null, GetConfigRes>('parse.getConfig')
 
-export type GetLimitReq = _GetLimitReq
-export type GetLimitRes = _GetLimitRes
+export type { GetLimitReq, GetLimitRes }
 
-export const getLimit = (params: GetLimitReq) => invoke<GetLimitRes>('parse.getLimit', params)
+export const getLimit = defineInvoke<GetLimitReq, GetLimitRes>('parse.getLimit')

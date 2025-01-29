@@ -1,7 +1,7 @@
 import { defineLoader } from '@main/loader.ts'
-import { defineIpcHandle } from '@main/utils/defineIpcHandle.ts'
 import { getUrl } from '@main/utils/getUrl.ts'
 import { hkListHttp } from '@main/utils/http.ts'
+import { success } from '@main/utils/response.ts'
 
 export interface GetLimitReq {
   token: string
@@ -29,13 +29,16 @@ export interface GetConfigRes {
   have_account: boolean
 }
 
-export default defineLoader(() => {
-  /** 获取当前卡密信息 */
-  defineIpcHandle('parse.getLimit', async (_, params: GetLimitReq) => {
-    return await hkListHttp.request<GetLimitRes>('get', getUrl('/user/parse/limit'), { params })
+export default defineLoader((ipc) => {
+  ipc.handle('parse.getConfig', async () => {
+    const res = await hkListHttp.request<GetConfigRes>('get', getUrl('/user/parse/config'))
+    return success(res)
   })
 
-  defineIpcHandle('parse.getConfig', async () => {
-    return await hkListHttp.request<GetConfigRes>('get', getUrl('/user/parse/config'))
+  ipc.handle('parse.getLimit', async (_, params) => {
+    const res = await hkListHttp.request<GetLimitRes>('get', getUrl('/user/parse/limit'), {
+      params
+    })
+    return success(res)
   })
 })

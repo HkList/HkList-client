@@ -17,10 +17,6 @@ const router = createRouter({
           component: () => import('@renderer/views/Account/index.vue')
         },
         {
-          path: '/record',
-          component: () => import('@renderer/views/Record/index.vue')
-        },
-        {
           path: '/task',
           component: () => import('@renderer/views/Task/index.vue')
         },

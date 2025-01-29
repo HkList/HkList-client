@@ -37,32 +37,35 @@
 
 <script lang="ts" setup>
 import logo from '@/resources/icon.png'
-import type { isMaximized } from '@renderer/api/window.ts'
-import { close, getIsMaximized, maximize, minimize, unmaximize } from '@renderer/api/window.ts'
+import type { IsMaximized } from '@main/ipc/window.ts'
 import { useSelectMenu } from '@renderer/utils/use/useSelectMenu.ts'
 import { CloseIcon, Fullscreen1Icon, FullscreenExit1Icon, MinusIcon } from 'tdesign-icons-vue-next'
 import { onMounted, onUnmounted, ref } from 'vue'
+import { invoke } from '@renderer/utils/invoke.ts'
 
 const [selectedMenu, changeMenu] = useSelectMenu()
 
-const isMaximized = ref<isMaximized>({
+const isMaximized = ref<IsMaximized>({
   isMaximized: false
 })
 
-const sizeChange = async () => (isMaximized.value = await getIsMaximized())
+const sizeChange = async () => (isMaximized.value = await invoke('window.getIsMaximized'))
 
 onMounted(async () => {
-  isMaximized.value = await getIsMaximized()
+  sizeChange()
   window.addEventListener('resize', sizeChange)
 })
 
-onUnmounted(() => {
-  window.removeEventListener('resize', sizeChange)
-})
+onUnmounted(() => window.removeEventListener('resize', sizeChange))
+
+const minimize = () => invoke('window.minimize')
+const maximize = () => invoke('window.maximize')
+const unMaximize = () => invoke('window.unMaximize')
+const close = () => invoke('window.close')
 
 const switchMaximize = async () => {
-  await (isMaximized.value ? unmaximize() : maximize())
-  isMaximized.value.isMaximized = !isMaximized.value.isMaximized
+  await (isMaximized.value.isMaximized ? unMaximize() : maximize())
+  sizeChange()
 }
 </script>
 

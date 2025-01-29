@@ -36,12 +36,12 @@
 </template>
 
 <script lang="ts" setup>
-import { restart as restartApi } from '@renderer/api/aria2.ts'
 import { useConfigStore } from '@renderer/stores/config.ts'
 import { useSaveFirst } from '@renderer/utils/use/useSaveFirst.ts'
 import { storeToRefs } from 'pinia'
 import type { FormProps } from 'tdesign-vue-next'
 import { MessagePlugin } from 'tdesign-vue-next'
+import { invoke } from '@renderer/utils/invoke.ts'
 
 const configStore = useConfigStore()
 const { config } = storeToRefs(configStore)
@@ -67,7 +67,7 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
 }
 
 const restart = async () => {
-  await restartApi()
+  await invoke("aria2.restart")
   MessagePlugin.success('重启Aria2成功')
 }
 </script>

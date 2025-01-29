@@ -1,6 +1,5 @@
 import { is } from '@electron-toolkit/utils'
 import { defineLoader } from '@main/loader.ts'
-import { defineIpcHandle } from '@main/utils/defineIpcHandle.ts'
 import { success } from '@main/utils/response.ts'
 import { app } from 'electron'
 import { existsSync, mkdirsSync, readJSONSync, writeJsonSync } from 'fs-extra'
@@ -10,7 +9,7 @@ const configPath = join(process.cwd(), '/config')
 const configFile = join(configPath, '/config.json')
 const downloadPath = join(app.getPath('downloads'), 'hklist-client')
 
-export const getConfig = (): config => {
+export const getConfig = (): Config => {
   const json = readJSONSync(configFile)
   json.dev = is.dev || process.argv.includes('--dev')
   return {
@@ -19,11 +18,11 @@ export const getConfig = (): config => {
   }
 }
 
-export const saveConfig = (config: config) => {
+export const saveConfig = (config: Config) => {
   writeJsonSync(configFile, config, { spaces: 2 })
 }
 
-export interface config {
+export interface Config {
   dev: boolean
   general: {
     theme: 'system' | 'light' | 'dark'
@@ -41,7 +40,7 @@ export interface config {
   }
 }
 
-export const defaultConfig: config = {
+export const defaultConfig: Config = {
   dev: false,
   general: {
     theme: 'system'
@@ -65,12 +64,12 @@ if (!existsSync(downloadPath)) mkdirsSync(downloadPath)
 
 export let nowConfig = getConfig()
 
-export default defineLoader(() => {
-  defineIpcHandle<null, config>('config.get', () => {
+export default defineLoader((ipc) => {
+  ipc.handle('config.get', () => {
     return success(nowConfig)
   })
 
-  defineIpcHandle<config>('config.save', (_, config) => {
+  ipc.handle('config.set', (_, config) => {
     saveConfig(config)
     nowConfig = getConfig()
     return success()

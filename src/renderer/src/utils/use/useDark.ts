@@ -1,4 +1,5 @@
 import { useConfigStore } from '@renderer/stores/config.ts'
+import { storeToRefs } from 'pinia'
 
 function setDark(event: MediaQueryList | MediaQueryListEvent) {
   if (event.matches) {
@@ -10,7 +11,8 @@ function setDark(event: MediaQueryList | MediaQueryListEvent) {
 
 export const useDark = () => {
   const configStore = useConfigStore()
-  const theme = configStore.config.general.theme
+  const { config } = storeToRefs(configStore)
+  const theme = config.value.general.theme
   const match = window.matchMedia('(prefers-color-scheme: dark)')
   match.removeEventListener('change', setDark)
 

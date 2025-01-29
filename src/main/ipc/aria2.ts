@@ -1,12 +1,12 @@
-import type { Conn } from '@huan_kong/maria2'
+import type { Aria2ClientInputOptions, Conn } from '@huan_kong/maria2'
 import { aria2, open } from '@huan_kong/maria2'
 import { nowConfig } from '@main/ipc/config.ts'
 import { defineLoader } from '@main/loader.ts'
-import { defineIpcHandle } from '@main/utils/defineIpcHandle.ts'
 import { success } from '@main/utils/response.ts'
 import { app, dialog } from 'electron'
 import type { ChildProcessWithoutNullStreams } from 'node:child_process'
 import { spawn } from 'node:child_process'
+import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 import WebSocket from 'ws'
 
@@ -15,6 +15,8 @@ export const aria2File = join(
   aria2Path,
   process.platform === 'win32' ? 'win32/aria2c.exe' : 'bin/aria2c'
 )
+export const aria2Config = join(aria2Path, 'aria2.conf')
+export const aria2Session = join(aria2Path, 'aria2.session')
 
 let proc: ChildProcessWithoutNullStreams | null = null
 let client: Conn | null = null
@@ -26,7 +28,8 @@ export const startAria2 = (): Promise<ChildProcessWithoutNullStreams> => {
       return
     }
 
-    const args = [`--conf-path=${aria2Path}/aria2.conf`]
+    const args = [`--conf-path=${aria2Config}`, `--save-session=${aria2Session}`]
+    if (existsSync(aria2Session)) args.push(`--input-file=${aria2Session}`)
     for (const key in nowConfig.aria2) args.push(`--${key}=${nowConfig.aria2[key]}`)
 
     const temp = spawn(aria2File, args)
@@ -36,7 +39,7 @@ export const startAria2 = (): Promise<ChildProcessWithoutNullStreams> => {
       info = data.toString()
     })
 
-    temp.stdout.once('data', async (data) => {
+    temp.stdout.on('data', async (data: Buffer) => {
       if (data.toString().includes('IPv4 RPC:')) {
         proc = temp
         client = await open(
@@ -45,6 +48,7 @@ export const startAria2 = (): Promise<ChildProcessWithoutNullStreams> => {
             secret: nowConfig.aria2['rpc-secret']
           }
         )
+        temp.stdout.removeAllListeners('data')
         resolve(temp)
       }
     })
@@ -60,38 +64,66 @@ export const startAria2 = (): Promise<ChildProcessWithoutNullStreams> => {
   })
 }
 
-export const stopAria2 = () => {
-  if (proc && !proc.killed) proc.kill()
+export const stopAria2 = async () => {
+  if (client) await aria2.shutdown(client)
+  if (proc) proc.kill()
   proc = null
   client = null
 }
 
-export default defineLoader(async () => {
+export interface AddTask extends Aria2ClientInputOptions {
+  urls: string[]
+}
+
+export interface GetTask {
+  offset: number
+  num: number
+}
+
+export default defineLoader(async (ipc) => {
   await startAria2()
 
-  defineIpcHandle('aria2.start', async () => {
+  ipc.handle('aria2.start', async () => {
     await startAria2()
     return success()
   })
 
-  defineIpcHandle('aria2.stop', () => {
-    stopAria2()
+  ipc.handle('aria2.stop', async () => {
+    await stopAria2()
     return success()
   })
 
-  defineIpcHandle('aria2.restart', async () => {
-    stopAria2()
+  ipc.handle('aria2.restart', async () => {
+    await stopAria2()
     await startAria2()
     return success()
   })
 
-  defineIpcHandle('aria2.getVersion', async () => {
+  ipc.handle('aria2.getVersion', async () => {
     await startAria2()
     return success(await aria2.getVersion(client!))
   })
 
-  app.on('before-quit', () => {
+  ipc.handle('aria2.addTask', async (_, params) => {
+    await startAria2()
+    const gid = await aria2.addUri(client!, params.urls, params)
+    return success({ gid })
+  })
+
+  ipc.handle('aria2.getActive', async () => {
+    return success(await aria2.tellActive(client!))
+  })
+
+  ipc.handle('aria2.getWaiting', async (_, params) => {
+    return success(await aria2.tellWaiting(client!, params.offset, params.num))
+  })
+
+  ipc.handle('aria2.getStopped', async (_, params) => {
+    return success(await aria2.tellStopped(client!, params.offset, params.num))
+  })
+
+  app.on('before-quit', async () => {
     // 防止有 aria2 进程没有被结束
-    stopAria2()
+    await stopAria2()
   })
 })

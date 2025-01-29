@@ -1,17 +1,31 @@
-export interface BaseResponse<T> {
-  code: number
+export interface BaseResponse<T = void> {
+  success: Boolean
   message: string
   data: T
 }
 
-export const success = (data: any = null) => {
+export interface SuccessResponse<T> extends BaseResponse<T> {
+  success: true
+}
+
+export interface FailureResponse<T> extends BaseResponse<T> {
+  success: false
+}
+
+export function success<T>(data: T): SuccessResponse<T>
+export function success(): SuccessResponse<null>
+export function success<T>(data?: T): SuccessResponse<T | null> {
   return {
-    code: 200,
+    success: true,
     message: '请求成功',
-    data
+    data: data !== undefined ? data : null
   }
 }
 
-export const fail = (message = '未捕获的错误', data: any = null) => {
-  return { code: 500, message, data }
+export function failure(message: string): FailureResponse<null> {
+  return {
+    success: false,
+    message,
+    data: null
+  }
 }

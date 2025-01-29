@@ -12,12 +12,6 @@
       </template>
       账号管理
     </t-menu-item>
-    <t-menu-item value="/record">
-      <template #icon>
-        <ListIcon />
-      </template>
-      记录管理
-    </t-menu-item>
     <t-menu-item value="/task">
       <template #icon>
         <DownloadIcon />
@@ -45,14 +39,7 @@
 import { useConfigStore } from '@renderer/stores/config.ts'
 import Layout from '@renderer/views/Layout.vue'
 import { storeToRefs } from 'pinia'
-import {
-  AppIcon,
-  DownloadIcon,
-  ListIcon,
-  SettingIcon,
-  ToolsIcon,
-  UserIcon
-} from 'tdesign-icons-vue-next'
+import { AppIcon, DownloadIcon, SettingIcon, ToolsIcon, UserIcon } from 'tdesign-icons-vue-next'
 
 const configStore = useConfigStore()
 const { config } = storeToRefs(configStore)

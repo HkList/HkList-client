@@ -1,6 +1,4 @@
 import run from '@main/utils/fingerprint.js'
-import type { BaseResponse } from '@main/utils/response.ts'
-import { fail, success } from '@main/utils/response.ts'
 import type { AxiosInstance, AxiosRequestConfig, CustomParamsSerializer, Method } from 'axios'
 import axios from 'axios'
 import { stringify } from 'qs'
@@ -51,29 +49,18 @@ class Http {
     this.axiosInstance.interceptors.response.use(
       (response) => {
         if (this.isHkList) {
-          return success(response.data.data)
+          return response.data.data
         } else {
           return response.data
         }
       },
       (error) => {
-        if (this.isHkList) {
-          return fail(
-            error?.response?.data?.message ?? '未知错误,可能是服务器地址有误',
-            error?.response?.data?.data
-          )
-        } else {
-          return Promise.reject(error)
-        }
+        return Promise.reject(error)
       }
     )
   }
 
-  public request<T>(
-    method: Method,
-    url: string,
-    param?: AxiosRequestConfig
-  ): Promise<BaseResponse<T>> {
+  public request<T>(method: Method, url: string, param?: AxiosRequestConfig): Promise<T> {
     return this.axiosInstance.request({
       method,
       url,

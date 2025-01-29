@@ -1,14 +1,11 @@
-import {
-  config,
-  getConfig as getConfigApi,
-  saveConfig as saveConfigApi
-} from '@renderer/api/config.ts'
+import type { Config } from '@/src/main/ipc/config.ts'
 import { useDark } from '@renderer/utils/use/useDark.ts'
 import { defineStore } from 'pinia'
-import { ref, toRaw } from 'vue'
+import { ref } from 'vue'
+import { invoke } from '@renderer/utils/invoke.ts'
 
 export const useConfigStore = defineStore('config', () => {
-  const config = ref<config>({
+  const config = ref<Config>({
     dev: false,
     general: {
       theme: 'system'
@@ -27,12 +24,12 @@ export const useConfigStore = defineStore('config', () => {
   })
 
   const getConfig = async () => {
-    config.value = await getConfigApi()
+    config.value = await invoke('config.get')
     useDark()
   }
 
   const saveConfig = async () => {
-    await saveConfigApi(toRaw(config.value))
+    await invoke('config.set', config.value)
     useDark()
   }
 

@@ -20,7 +20,7 @@
         </t-space>
       </div>
     </t-header>
-    <t-layout>
+    <t-layout class="main">
       <t-aside>
         <t-menu v-model="selectedMenu" @change="changeMenu">
           <slot></slot>
@@ -54,9 +54,9 @@ const sizeChange = async () => (isMaximized.value = await invoke('window.getIsMa
 onMounted(async () => {
   sizeChange()
   window.addEventListener('resize', sizeChange)
-})
 
-onUnmounted(() => window.removeEventListener('resize', sizeChange))
+  onUnmounted(() => window.removeEventListener('resize', sizeChange))
+})
 
 const minimize = () => invoke('window.minimize')
 const maximize = () => invoke('window.maximize')
@@ -74,8 +74,9 @@ const switchMaximize = async () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
-  height: 65px;
+  padding: 5px 20px;
+  height: 56px;
+  flex-shrink: 0;
 
   .title {
     display: flex;
@@ -100,5 +101,9 @@ const switchMaximize = async () => {
       padding: 10px;
     }
   }
+}
+
+.main {
+  height: calc(100% - 66px);
 }
 </style>

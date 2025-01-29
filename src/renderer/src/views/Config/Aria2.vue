@@ -67,7 +67,7 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
 }
 
 const restart = async () => {
-  await invoke("aria2.restart")
+  await invoke('aria2.restart')
   MessagePlugin.success('重启Aria2成功')
 }
 </script>

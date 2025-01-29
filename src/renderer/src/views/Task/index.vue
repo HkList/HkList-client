@@ -7,6 +7,7 @@
           <span>全部任务</span>
         </div>
       </template>
+      <TaskItem :task="[...active, ...waiting, ...stopped]" />
     </t-tab-panel>
     <t-tab-panel value="active">
       <template #label>
@@ -15,6 +16,7 @@
           <span>正在下载</span>
         </div>
       </template>
+      <TaskItem :task="active" />
     </t-tab-panel>
     <t-tab-panel value="waiting">
       <template #label>
@@ -23,6 +25,7 @@
           <span>正在等待</span>
         </div>
       </template>
+      <TaskItem :task="waiting" />
     </t-tab-panel>
     <t-tab-panel value="stoped">
       <template #label>
@@ -31,6 +34,7 @@
           <span>已完成/已停止</span>
         </div>
       </template>
+      <TaskItem :task="stopped" />
     </t-tab-panel>
   </t-tabs>
 </template>
@@ -38,12 +42,33 @@
 <script lang="ts" setup>
 import { PauseIcon, PlayIcon, RectangleFilledIcon, ListIcon } from 'tdesign-icons-vue-next'
 import type { TabsProps } from 'tdesign-vue-next'
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
+import { useTaskStore } from '@renderer/stores/task.ts'
+import TaskItem from '@renderer/views/Task/TaskItem.vue'
+import { storeToRefs } from 'pinia'
 
 const selected = ref('all')
 const handlerChange: TabsProps['onChange'] = (value) => {
   selected.value = value.toString()
 }
+
+const taskStore = useTaskStore()
+const { active, stopped, waiting } = storeToRefs(taskStore)
+
+const getTask = () => {
+  taskStore.getAcitve()
+  taskStore.getStopped()
+  taskStore.getWaiting()
+}
+
+onMounted(() => {
+  getTask()
+  const id = setInterval(getTask, 100)
+
+  onUnmounted(() => {
+    clearInterval(id)
+  })
+})
 </script>
 
 <style lang="scss" scoped>

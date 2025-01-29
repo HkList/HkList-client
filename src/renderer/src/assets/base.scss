@@ -3,6 +3,10 @@
   padding: 0;
 }
 
+p {
+  overflow-wrap: break-word;
+}
+
 body {
   width: 100vw;
   height: 100vh;
@@ -14,6 +18,10 @@ body {
   height: 100%;
 }
 
+.t-layout {
+  width: 100%;
+}
+
 .t-layout__header {
   -webkit-app-region: drag;
 }
@@ -22,13 +30,7 @@ body {
   -webkit-app-region: no-drag;
 }
 
-.t-layout {
-  width: 100%;
-}
-
 .t-layout__sider {
-  width: auto !important;
-  overflow: hidden;
   -webkit-app-region: drag;
 }
 
@@ -42,19 +44,19 @@ body {
 }
 
 .content {
-  min-width: 500px;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-.t-textarea__inner {
-  height: 200px;
 }
 
 .t-dialog__position {
   padding: 0 !important;
   align-items: center !important;
+}
+
+.t-tabs__content {
+  height: 100%;
+  overflow: auto !important;
 }
 
 ::-webkit-scrollbar {

@@ -9,6 +9,7 @@ import { spawn } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 import WebSocket from 'ws'
+import isPortReachable from 'is-port-reachable'
 
 export const aria2Path = join(process.cwd(), 'aria2')
 export const aria2File = join(
@@ -22,9 +23,15 @@ let proc: ChildProcessWithoutNullStreams | null = null
 let client: Conn | null = null
 
 export const startAria2 = (): Promise<ChildProcessWithoutNullStreams> => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     if (proc) {
       resolve(proc)
+      return
+    }
+
+    const res = await isPortReachable(nowConfig.aria2['rpc-listen-port'], { host: 'localhost' })
+    if (res) {
+      reject(new Error(`aria2 启动失败: 端口 ${nowConfig.aria2['rpc-listen-port']} 已被占用`))
       return
     }
 
@@ -57,8 +64,7 @@ export const startAria2 = (): Promise<ChildProcessWithoutNullStreams> => {
       if (code && code !== 0) {
         proc = null
         client = null
-        dialog.showErrorBox('aria2 启动失败', info)
-        reject(new Error(`aria2 exited with code ${code}`))
+        reject(new Error(`aria2 启动失败: ${info}`))
       }
     })
   })
@@ -81,7 +87,14 @@ export interface GetTask {
 }
 
 export default defineLoader(async (ipc) => {
-  await startAria2()
+  try {
+    await startAria2()
+  } catch (error) {
+    console.log(error)
+    if (error instanceof Error) {
+      dialog.showErrorBox('aria2 启动失败', error.message)
+    }
+  }
 
   ipc.handle('aria2.start', async () => {
     await startAria2()
@@ -111,14 +124,17 @@ export default defineLoader(async (ipc) => {
   })
 
   ipc.handle('aria2.getActive', async () => {
+    await startAria2()
     return success(await aria2.tellActive(client!))
   })
 
   ipc.handle('aria2.getWaiting', async (_, params) => {
+    await startAria2()
     return success(await aria2.tellWaiting(client!, params.offset, params.num))
   })
 
   ipc.handle('aria2.getStopped', async (_, params) => {
+    await startAria2()
     return success(await aria2.tellStopped(client!, params.offset, params.num))
   })
 

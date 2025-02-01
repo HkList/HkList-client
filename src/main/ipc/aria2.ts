@@ -2,14 +2,15 @@ import type { Aria2ClientInputOptions, Conn } from '@huan_kong/maria2'
 import { aria2, open } from '@huan_kong/maria2'
 import { nowConfig } from '@main/ipc/config.ts'
 import { defineLoader } from '@main/loader.ts'
+import { getTaskName } from '@main/utils/aria2.ts'
 import { success } from '@main/utils/response.ts'
-import { app, dialog } from 'electron'
+import { app, dialog, shell } from 'electron'
+import isPortReachable from 'is-port-reachable'
 import type { ChildProcessWithoutNullStreams } from 'node:child_process'
 import { spawn } from 'node:child_process'
-import { existsSync } from 'node:fs'
+import { existsSync, unlinkSync } from 'node:fs'
 import { join } from 'node:path'
 import WebSocket from 'ws'
-import isPortReachable from 'is-port-reachable'
 
 export const aria2Path = join(process.cwd(), 'aria2')
 export const aria2File = join(
@@ -86,6 +87,16 @@ export interface GetTask {
   num: number
 }
 
+export interface OperateTask {
+  gids: string[]
+}
+
+export type RemoveTask = OperateTask & { removeFile: boolean }
+
+export interface OpenTaskFolder {
+  gid: string
+}
+
 export default defineLoader(async (ipc) => {
   try {
     await startAria2()
@@ -136,6 +147,45 @@ export default defineLoader(async (ipc) => {
   ipc.handle('aria2.getStopped', async (_, params) => {
     await startAria2()
     return success(await aria2.tellStopped(client!, params.offset, params.num))
+  })
+
+  ipc.handle('aria2.unpauseTask', async (_, params) => {
+    await startAria2()
+    await Promise.all(params.gids.map(async (gid) => await aria2.unpause(client!, gid)))
+    return success()
+  })
+
+  ipc.handle('aria2.pauseTask', async (_, params) => {
+    await startAria2()
+    await Promise.all(params.gids.map(async (gid) => await aria2.pause(client!, gid)))
+    return success()
+  })
+
+  ipc.handle('aria2.removeTask', async (_, params) => {
+    await startAria2()
+    if (params.removeFile) {
+      // 收集文件位置
+      const tasks = await Promise.all(
+        params.gids.map(async (gid) => await aria2.tellStatus(client!, gid))
+      )
+      tasks.forEach((task) => {
+        let path = task.files?.[0]?.path
+        if (path === '') {
+          const filename = getTaskName(task)
+          path = join(task.dir, filename)
+        }
+        if (existsSync(path)) unlinkSync(path)
+      })
+    }
+    await Promise.all(params.gids.map(async (gid) => await aria2.remove(client!, gid)))
+    return success()
+  })
+
+  ipc.handle('aria2.openTaskFolder', async (_, params) => {
+    await startAria2()
+    const task = await aria2.tellStatus(client!, params.gid)
+    shell.openPath(task.dir)
+    return success()
   })
 
   app.on('before-quit', async () => {

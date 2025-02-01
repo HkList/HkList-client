@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
 import type { GetConfigRes, GetLimitReq, GetLimitRes } from '@main/ipc/parse.ts'
 import { invoke } from '@renderer/utils/invoke.ts'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 export const useParseStore = defineStore('parse', () => {
   const GetLimitReq = ref<GetLimitReq>({

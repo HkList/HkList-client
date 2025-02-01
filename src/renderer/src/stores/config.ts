@@ -1,12 +1,11 @@
 import type { Config } from '@/src/main/ipc/config.ts'
+import { invoke } from '@renderer/utils/invoke.ts'
 import { useDark } from '@renderer/utils/use/useDark.ts'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { invoke } from '@renderer/utils/invoke.ts'
 
 export const useConfigStore = defineStore('config', () => {
   const config = ref<Config>({
-    dev: false,
     general: {
       theme: 'system'
     },

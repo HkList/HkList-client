@@ -1,5 +1,5 @@
-import { AxiosError } from 'axios'
 import { failure } from '@main/utils/response.ts'
+import { AxiosError } from 'axios'
 
 export function handleError(error: unknown) {
   console.log(error)

@@ -37,10 +37,6 @@ const router = createRouter({
               component: () => import('@renderer/views/Config/Aria2.vue')
             }
           ]
-        },
-        {
-          path: '/debug',
-          component: () => import('@renderer/views/Debug/index.vue')
         }
       ]
     },

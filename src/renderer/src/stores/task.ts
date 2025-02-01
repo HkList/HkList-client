@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
 import type { Aria2DownloadStatus } from '@huan_kong/maria2'
 import { invoke } from '@renderer/utils/invoke.ts'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 export const useTaskStore = defineStore('task', () => {
   const active = ref<Aria2DownloadStatus[]>([])
@@ -14,12 +14,12 @@ export const useTaskStore = defineStore('task', () => {
   }
 
   const getWaiting = async () => {
-    const res = await invoke('aria2.getWaiting', { offset: 0, num: 1000 })
+    const res = await invoke('aria2.getWaiting', { offset: 0, num: 10000 })
     waiting.value = res
   }
 
   const getStopped = async () => {
-    const res = await invoke('aria2.getStopped', { offset: 0, num: 1000 })
+    const res = await invoke('aria2.getStopped', { offset: 0, num: 10000 })
     stopped.value = res
   }
 

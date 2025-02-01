@@ -3,10 +3,10 @@ import { is } from '@electron-toolkit/utils'
 import { defineLoader } from '@main/loader.ts'
 import { BrowserWindow, screen, shell } from 'electron'
 import { autoUpdater } from 'electron-updater'
-import { join } from 'path'
+import { join } from 'node:path'
 
-const width = 1120
-const height = 720
+const width = 1170
+const height = 750
 
 export default defineLoader<BrowserWindow>(() => {
   const mainWindow = new BrowserWindow({

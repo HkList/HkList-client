@@ -37,11 +37,11 @@
 
 <script lang="ts" setup>
 import { useConfigStore } from '@renderer/stores/config.ts'
+import { invoke } from '@renderer/utils/invoke.ts'
 import { useSaveFirst } from '@renderer/utils/use/useSaveFirst.ts'
 import { storeToRefs } from 'pinia'
 import type { FormProps } from 'tdesign-vue-next'
 import { MessagePlugin } from 'tdesign-vue-next'
-import { invoke } from '@renderer/utils/invoke.ts'
 
 const configStore = useConfigStore()
 const { config } = storeToRefs(configStore)

@@ -38,10 +38,10 @@
 <script lang="ts" setup>
 import logo from '@/resources/icon.png'
 import type { IsMaximized } from '@main/ipc/window.ts'
+import { invoke } from '@renderer/utils/invoke.ts'
 import { useSelectMenu } from '@renderer/utils/use/useSelectMenu.ts'
 import { CloseIcon, Fullscreen1Icon, FullscreenExit1Icon, MinusIcon } from 'tdesign-icons-vue-next'
 import { onMounted, onUnmounted, ref } from 'vue'
-import { invoke } from '@renderer/utils/invoke.ts'
 
 const [selectedMenu, changeMenu] = useSelectMenu()
 

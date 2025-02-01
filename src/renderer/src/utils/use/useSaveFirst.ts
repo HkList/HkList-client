@@ -1,5 +1,6 @@
 import { MessagePlugin } from 'tdesign-vue-next'
-import { onUnmounted, ref, type Ref } from 'vue'
+import type { Ref } from 'vue'
+import { onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 export const useSaveFirst = (): [Ref<boolean, boolean>, () => boolean] => {

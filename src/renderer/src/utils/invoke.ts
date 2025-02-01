@@ -1,7 +1,7 @@
-import NProgress from '@renderer/utils/progress.ts'
-import { MessagePlugin } from 'tdesign-vue-next'
 import type { IpcEvents } from '@/src/main/ipc/type.ts'
 import { IpcEmitter } from '@electron-toolkit/typed-ipc/renderer'
+import NProgress from '@renderer/utils/progress.ts'
+import { MessagePlugin } from 'tdesign-vue-next'
 import { toRaw } from 'vue'
 
 const ipc = new IpcEmitter<IpcEvents>()

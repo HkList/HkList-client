@@ -1,5 +1,6 @@
-import { type MenuProps } from 'tdesign-vue-next'
-import { ref, type Ref } from 'vue'
+import type { MenuProps } from 'tdesign-vue-next'
+import type { Ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 export const useSelectMenu = (): [Ref<string, string>, MenuProps['onChange']] => {

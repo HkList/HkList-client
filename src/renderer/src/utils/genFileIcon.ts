@@ -99,6 +99,6 @@ export const getFileType = (filename: string): IconList => {
 }
 
 export const getFileIcon = (filename: string) => {
-  const fileType = getFileType(filename)
+  const fileType = getFileType(filename ?? '')
   return iconList[fileType]
 }

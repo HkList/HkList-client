@@ -1,4 +1,3 @@
-import { is } from '@electron-toolkit/utils'
 import { defineLoader } from '@main/loader.ts'
 import { success } from '@main/utils/response.ts'
 import { app } from 'electron'
@@ -11,7 +10,6 @@ const downloadPath = join(app.getPath('downloads'), 'hklist-client')
 
 export const getConfig = (): Config => {
   const json = readJSONSync(configFile)
-  json.dev = is.dev || process.argv.includes('--dev')
   return {
     ...defaultConfig,
     ...json
@@ -23,7 +21,6 @@ export const saveConfig = (config: Config) => {
 }
 
 export interface Config {
-  dev: boolean
   general: {
     theme: 'system' | 'light' | 'dark'
   }
@@ -41,7 +38,6 @@ export interface Config {
 }
 
 export const defaultConfig: Config = {
-  dev: false,
   general: {
     theme: 'system'
   },

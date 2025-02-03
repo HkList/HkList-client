@@ -15,11 +15,24 @@
       </p>
       <Progress :active="task.status === 'active'" :progress="parseFloat(progress)" />
     </div>
+
     <template #action>
       <t-space class="gap-action">
-        <t-link theme="primary" v-if="task.status === 'active'" @click="pauseTask"> 暂停 </t-link>
-        <t-link theme="primary" v-else @click="unpauseTask"> 开始 </t-link>
-        <t-link theme="primary" @click="removeTask"> 删除任务 </t-link>
+        <template v-if="task.status === 'removed'">
+          <t-link theme="primary" @click="removeTaskDownloadResult"> 删除任务 </t-link>
+        </template>
+        <template v-else>
+          <t-link theme="primary" v-if="task.status === 'active'" @click="pauseTask"> 暂停 </t-link>
+          <t-link theme="primary" v-else @click="unpauseTask"> 开始 </t-link>
+          <t-popconfirm
+            theme="danger"
+            content="是否要删除文件"
+            @cancel="removeTask(false)"
+            @confirm="removeTask(true)"
+          >
+            <t-link theme="primary"> 删除任务 </t-link>
+          </t-popconfirm>
+        </template>
         <t-link theme="primary" @click="openTaskFolder"> 打开所在位置 </t-link>
       </t-space>
     </template>
@@ -36,7 +49,6 @@ import { invoke } from '@renderer/utils/invoke.ts'
 import { ref, watch } from 'vue'
 
 const { task } = defineProps<{ task: Aria2DownloadStatus }>()
-console.log(task)
 
 const progress = ref(calcProgress(task))
 const filename = ref(getTaskName(task))
@@ -57,8 +69,12 @@ const unpauseTask = async () => {
   await invoke('aria2.unpauseTask', { gids: [task.gid] })
 }
 
-const removeTask = async () => {
-  await invoke('aria2.removeTask', { gids: [task.gid], removeFile: true })
+const removeTask = async (removeFile: boolean) => {
+  await invoke('aria2.removeTask', { gids: [task.gid], removeFile })
+}
+
+const removeTaskDownloadResult = async () => {
+  await invoke('aria2.removeTaskResult', { gids: [task.gid] })
 }
 
 const openTaskFolder = async () => {

@@ -27,11 +27,11 @@ export const matchStatus = (status: Aria2DownloadStatus['status']) => {
     case 'paused':
       return '暂停中'
     case 'error':
-      return '错误啦'
+      return '出错啦'
     case 'complete':
       return '完成啦'
     case 'removed':
-      return '已移除'
+      return '已删除'
     default:
       return '未知状态'
   }

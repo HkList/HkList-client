@@ -1,4 +1,4 @@
-import type { Aria2ClientInputOptions, Conn } from '@huan_kong/maria2'
+import type { Aria2ClientInputOptions, Aria2DownloadStatus, Conn } from '@huan_kong/maria2'
 import { aria2, open } from '@huan_kong/maria2'
 import { nowConfig } from '@main/ipc/config.ts'
 import { defineLoader } from '@main/loader.ts'
@@ -8,7 +8,8 @@ import { app, dialog, shell } from 'electron'
 import isPortReachable from 'is-port-reachable'
 import type { ChildProcessWithoutNullStreams } from 'node:child_process'
 import { spawn } from 'node:child_process'
-import { existsSync, unlinkSync } from 'node:fs'
+import { existsSync } from 'node:fs'
+import { access, constants, unlink } from 'node:fs/promises'
 import { join } from 'node:path'
 import WebSocket from 'ws'
 
@@ -136,17 +137,20 @@ export default defineLoader(async (ipc) => {
 
   ipc.handle('aria2.getActive', async () => {
     await startAria2()
-    return success(await aria2.tellActive(client!))
+    const tasks = await aria2.tellActive(client!)
+    return success(tasks)
   })
 
   ipc.handle('aria2.getWaiting', async (_, params) => {
     await startAria2()
-    return success(await aria2.tellWaiting(client!, params.offset, params.num))
+    const tasks = await aria2.tellWaiting(client!, params.offset, params.num)
+    return success(tasks)
   })
 
   ipc.handle('aria2.getStopped', async (_, params) => {
     await startAria2()
-    return success(await aria2.tellStopped(client!, params.offset, params.num))
+    const tasks = await aria2.tellStopped(client!, params.offset, params.num)
+    return success(tasks)
   })
 
   ipc.handle('aria2.unpauseTask', async (_, params) => {
@@ -163,21 +167,54 @@ export default defineLoader(async (ipc) => {
 
   ipc.handle('aria2.removeTask', async (_, params) => {
     await startAria2()
-    if (params.removeFile) {
-      // 收集文件位置
-      const tasks = await Promise.all(
-        params.gids.map(async (gid) => await aria2.tellStatus(client!, gid))
-      )
-      tasks.forEach((task) => {
-        let path = task.files?.[0]?.path
-        if (path === '') {
-          const filename = getTaskName(task)
-          path = join(task.dir, filename)
-        }
-        if (existsSync(path)) unlinkSync(path)
+
+    let tasks: Aria2DownloadStatus[] = await Promise.all(
+      params.gids.map(async (gid) => await aria2.tellStatus(client!, gid))
+    )
+
+    await Promise.all(
+      tasks.map(async (task) => {
+        return await (async () => {
+          if (task.status === 'active') await aria2.forcePause(client!, task.gid)
+          await aria2.remove(client!, task.gid)
+        })()
       })
+    )
+
+    if (params.removeFile) {
+      await Promise.all(
+        tasks.map(async (task) => {
+          let path = task.files?.[0]?.path
+          if (path === '') path = join(task.dir, getTaskName(task))
+          try {
+            await access(path, constants.F_OK)
+            await unlink(path)
+            const aria2FilePath = path + '.aria2'
+            await access(aria2FilePath, constants.F_OK)
+            await unlink(aria2FilePath)
+          } catch (error) {
+            console.log('删除文件失败', error)
+          }
+        })
+      )
     }
-    await Promise.all(params.gids.map(async (gid) => await aria2.remove(client!, gid)))
+
+    return success()
+  })
+
+  ipc.handle('aria2.removeTaskResult', async (_, params) => {
+    await startAria2()
+
+    let tasks: Aria2DownloadStatus[] = await Promise.all(
+      params.gids.map(async (gid) => await aria2.tellStatus(client!, gid))
+    )
+
+    await Promise.all(
+      tasks
+        .filter((task) => task.status === 'removed')
+        .map(async (task) => aria2.removeDownloadResult(client!, task.gid))
+    )
+
     return success()
   })
 

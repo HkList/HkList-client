@@ -26,6 +26,7 @@ export type BaseIpcEvents = {
   'aria2.unpauseTask': (params: OperateTask) => null
   'aria2.pauseTask': (params: OperateTask) => null
   'aria2.removeTask': (params: RemoveTask) => null
+  'aria2.removeTaskResult': (params: OperateTask) => null
   'aria2.openTaskFolder': (params: OpenTaskFolder) => null
 
   'parse.getLimit': (params: GetLimitReq) => GetLimitRes

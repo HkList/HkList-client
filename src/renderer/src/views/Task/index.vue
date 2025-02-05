@@ -1,6 +1,15 @@
 <template>
+  <AddTask v-model="showAddTask" />
   <t-card class="tasks">
     <t-tabs :value="selected" placement="left" @change="handlerChange" theme="card" class="tabs">
+      <t-tab-panel value="add">
+        <template #label>
+          <div class="tab-item">
+            <AddIcon style="margin-left: 3px" />
+            <span>添加任务</span>
+          </div>
+        </template>
+      </t-tab-panel>
       <t-tab-panel value="all">
         <template #label>
           <div class="tab-item">
@@ -44,13 +53,20 @@
 <script lang="ts" setup>
 import { useTaskStore } from '@renderer/stores/task.ts'
 import TaskList from '@renderer/views/Task/TaskList.vue'
+import AddTask from '@renderer/views/Task/AddTask.vue'
 import { storeToRefs } from 'pinia'
-import { ListIcon, PauseIcon, PlayIcon, RectangleFilledIcon } from 'tdesign-icons-vue-next'
+import { ListIcon, PauseIcon, PlayIcon, RectangleFilledIcon, AddIcon } from 'tdesign-icons-vue-next'
 import type { TabsProps } from 'tdesign-vue-next'
 import { onMounted, onUnmounted, ref } from 'vue'
 
 const selected = ref('all')
+const showAddTask = ref(false)
+
 const handlerChange: TabsProps['onChange'] = (value) => {
+  if (value === 'add') {
+    showAddTask.value = true
+    return
+  }
   selected.value = value.toString()
 }
 

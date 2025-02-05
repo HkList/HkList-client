@@ -13,6 +13,7 @@ declare module 'vue' {
     TButton: typeof import('tdesign-vue-next')['Button']
     TCard: typeof import('tdesign-vue-next')['Card']
     TContent: typeof import('tdesign-vue-next')['Content']
+    TDialog: typeof import('tdesign-vue-next')['Dialog']
     TEmpty: typeof import('tdesign-vue-next')['Empty']
     TForm: typeof import('tdesign-vue-next')['Form']
     TFormItem: typeof import('tdesign-vue-next')['FormItem']
@@ -28,9 +29,12 @@ declare module 'vue' {
     TOption: typeof import('tdesign-vue-next')['Option']
     TPopconfirm: typeof import('tdesign-vue-next')['Popconfirm']
     TSelect: typeof import('tdesign-vue-next')['Select']
+    TSelectInput: typeof import('tdesign-vue-next')['SelectInput']
     TSpace: typeof import('tdesign-vue-next')['Space']
     TSubmenu: typeof import('tdesign-vue-next')['Submenu']
+    TTable: typeof import('tdesign-vue-next')['Table']
     TTabPanel: typeof import('tdesign-vue-next')['TabPanel']
     TTabs: typeof import('tdesign-vue-next')['Tabs']
+    TTextarea: typeof import('tdesign-vue-next')['Textarea']
   }
 }

@@ -20,30 +20,20 @@ import { useConfigStore } from '@renderer/stores/config.ts'
 import { useParseStore } from '@renderer/stores/parse.ts'
 import { useSaveFirst } from '@renderer/utils/use/useSaveFirst.ts'
 import { storeToRefs } from 'pinia'
-import type { CustomValidator, FormProps } from 'tdesign-vue-next'
+import type { FormProps } from 'tdesign-vue-next'
 import { MessagePlugin } from 'tdesign-vue-next'
+import { httpUrlValidator } from '@renderer/utils/httpUrlValidator.ts'
 
 const configStore = useConfigStore()
 const { config } = storeToRefs(configStore)
 
 const [haveChanged, triggerChange] = useSaveFirst()
 
-const serverValidator: CustomValidator = (val: string) => {
-  if (!/^https?:\/\/[a-z0-9-]+(\.[a-z0-9-]+)+(:\d{2,5})?$/.test(val)) {
-    return {
-      result: false,
-      message: '服务器地址格式错误',
-      type: 'error'
-    }
-  }
-  return true
-}
-
 const formRules: FormProps['rules'] = {
   server: [
     { required: true, message: '请输入服务器地址' },
     {
-      validator: serverValidator
+      validator: httpUrlValidator
     }
   ]
 }

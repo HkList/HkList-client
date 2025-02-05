@@ -1,6 +1,6 @@
 import type { Aria2DownloadGid, Aria2DownloadStatus, Aria2ServerVersion } from '@huan_kong/maria2'
 import type { AddTask, GetTask, OpenTaskFolder, OperateTask, RemoveTask } from '@main/ipc/aria2.ts'
-import type { Config } from '@main/ipc/config.ts'
+import type { Config, SelectedFolder } from '@main/ipc/config.ts'
 import type { GetConfigRes, GetLimitReq, GetLimitRes } from '@main/ipc/parse.ts'
 import type { IsMaximized } from '@main/ipc/window.ts'
 import type { SuccessResponse } from '@main/utils/response.ts'
@@ -14,6 +14,7 @@ export type BaseIpcEvents = {
 
   'config.get': () => Config
   'config.set': (config: Config) => null
+  'config.selectFoloder': () => SelectedFolder
 
   'aria2.start': () => null
   'aria2.stop': () => null

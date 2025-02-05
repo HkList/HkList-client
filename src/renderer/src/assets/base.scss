@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   overflow-wrap: break-word;
+  -webkit-app-region: no-drag;
 }
 
 img {
@@ -23,20 +24,10 @@ body {
   width: 100%;
 }
 
-.t-layout__header {
+.t-layout__header,
+.t-menu,
+.title > * {
   -webkit-app-region: drag;
-}
-
-.t-layout__header .control {
-  -webkit-app-region: no-drag;
-}
-
-.t-layout__sider {
-  -webkit-app-region: drag;
-}
-
-.t-layout__sider .t-menu__item {
-  -webkit-app-region: no-drag;
 }
 
 .t-layout__content {
@@ -50,6 +41,11 @@ body {
   flex-direction: column;
 }
 
+.t-dialog {
+  max-height: 80vh !important;
+  overflow: auto !important;
+}
+
 .t-dialog__position {
   padding: 0 !important;
   align-items: center !important;
@@ -58,6 +54,10 @@ body {
 .t-tabs__content {
   height: 100%;
   overflow: auto !important;
+}
+
+.t-textarea__inner {
+  height: 200px !important;
 }
 
 ::-webkit-scrollbar {

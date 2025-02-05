@@ -2,7 +2,10 @@
   <t-card>
     <t-form :data="config.aria2" :rules="formRules" @submit="submitForm" :labelWidth="120">
       <t-form-item name="dir" label="下载位置" @change="triggerChange">
-        <t-input v-model="config.aria2.dir" />
+        <div class="input">
+          <t-input v-model="config.aria2.dir" />
+          <t-button @click="showSelectDir">选择</t-button>
+        </div>
       </t-form-item>
 
       <t-form-item name="rpc-listen-port" label="RPC端口" @change="triggerChange">
@@ -66,10 +69,22 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
   restart()
 }
 
+const showSelectDir = async () => {
+  const result = await invoke('config.selectFoloder')
+  if (typeof result === 'boolean') return
+  config.value.aria2.dir = result
+}
+
 const restart = async () => {
   await invoke('aria2.restart')
   MessagePlugin.success('重启Aria2成功')
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.input {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+</style>

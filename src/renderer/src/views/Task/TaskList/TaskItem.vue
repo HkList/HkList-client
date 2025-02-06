@@ -33,7 +33,7 @@
             <t-link theme="primary"> 删除任务 </t-link>
           </t-popconfirm>
         </template>
-        <t-link theme="primary" @click="openTaskFolder"> 打开所在位置 </t-link>
+        <t-link theme="primary" @click="openTaskFolder"> 打开文件位置 </t-link>
       </t-space>
     </template>
   </t-list-item>

@@ -1,8 +1,13 @@
-import type { Aria2DownloadGid, Aria2DownloadStatus, Aria2ServerVersion } from '@huan_kong/maria2'
+import type {
+  Aria2DownloadGid,
+  Aria2DownloadStatus,
+  Aria2ServerVersion,
+  Aria2ClientGlobalOptions
+} from '@huan_kong/maria2'
 import type { AddTask, GetTask, OpenTaskFolder, OperateTask, RemoveTask } from '@main/ipc/aria2.ts'
-import type { Config, SelectedFolder } from '@main/ipc/config.ts'
+import type { Config } from '@main/ipc/config.ts'
 import type { GetConfigRes, GetLimitReq, GetLimitRes } from '@main/ipc/parse.ts'
-import type { IsMaximized } from '@main/ipc/window.ts'
+import type { IsMaximized, SelectedFolder } from '@main/ipc/window.ts'
 import type { SuccessResponse } from '@main/utils/response.ts'
 
 export type BaseIpcEvents = {
@@ -11,10 +16,10 @@ export type BaseIpcEvents = {
   'window.unMaximize': () => null
   'window.getIsMaximized': () => IsMaximized
   'window.close': () => null
+  'window.selectFoloder': () => SelectedFolder
 
   'config.get': () => Config
   'config.set': (config: Config) => null
-  'config.selectFoloder': () => SelectedFolder
 
   'aria2.start': () => null
   'aria2.stop': () => null
@@ -29,6 +34,8 @@ export type BaseIpcEvents = {
   'aria2.removeTask': (params: RemoveTask) => null
   'aria2.removeTaskResult': (params: OperateTask) => null
   'aria2.openTaskFolder': (params: OpenTaskFolder) => null
+  'aria2.getGlobalOption': () => Aria2ClientGlobalOptions
+  'aria2.changeGlobalOption': (params: Aria2ClientGlobalOptions) => null
 
   'parse.getLimit': (params: GetLimitReq) => GetLimitRes
   'parse.getConfig': () => GetConfigRes

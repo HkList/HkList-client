@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
 import type { Aria2DownloadStatus } from '@huan_kong/maria2'
-import TaskItem from '@renderer/views/Task/TaskItem.vue'
+import TaskItem from '@renderer/views/Task/TaskList/TaskItem.vue'
 
 const { tasks } = defineProps<{ tasks: Aria2DownloadStatus[] }>()
 </script>

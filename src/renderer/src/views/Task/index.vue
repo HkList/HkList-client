@@ -1,6 +1,6 @@
 <template>
-  <AddTask v-model="showAddTask" />
   <t-card class="tasks">
+    <AddTask v-model="showAddTask" />
     <t-tabs :value="selected" placement="left" @change="handlerChange" theme="card" class="tabs">
       <t-tab-panel value="add">
         <template #label>
@@ -48,12 +48,15 @@
       </t-tab-panel>
     </t-tabs>
   </t-card>
+
+  <StatusBar />
 </template>
 
 <script lang="ts" setup>
 import { useTaskStore } from '@renderer/stores/task.ts'
-import TaskList from '@renderer/views/Task/TaskList.vue'
-import AddTask from '@renderer/views/Task/AddTask.vue'
+import TaskList from '@renderer/views/Task/TaskList/index.vue'
+import AddTask from '@renderer/views/Task/AddTask/index.vue'
+import StatusBar from '@renderer/views/Task/StatusBar/index.vue'
 import { storeToRefs } from 'pinia'
 import { ListIcon, PauseIcon, PlayIcon, RectangleFilledIcon, AddIcon } from 'tdesign-icons-vue-next'
 import type { TabsProps } from 'tdesign-vue-next'
@@ -92,7 +95,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .tabs {
   border-radius: 6px;
-  min-height: 600px;
+  min-height: 580px;
 
   .tab-item {
     display: flex;
@@ -107,6 +110,10 @@ onMounted(() => {
   .t-card__body {
     padding: 0;
     overflow: hidden;
+  }
+
+  .t-tabs__nav-item:nth-child(1) {
+    margin-bottom: 50px;
   }
 }
 </style>

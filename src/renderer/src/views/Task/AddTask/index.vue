@@ -32,7 +32,7 @@
 
 <script lang="tsx" setup>
 import { computed, ref, toRaw, watch } from 'vue'
-import SelectOptions from '@renderer/views/Task/SelectOptions.vue'
+import SelectOptions from '@renderer/views/Task/AddTask/SelectOptions.vue'
 import type { AddTask } from '@main/ipc/aria2.ts'
 import type { Aria2ClientInputOptionKey } from '@huan_kong/maria2'
 import type { FormProps, TableProps } from 'tdesign-vue-next'
@@ -158,9 +158,12 @@ const columns: TableProps['columns'] = [
 ]
 
 const showSelectDir = async () => {
-  const result = await invoke('config.selectFoloder')
-  if (typeof result === 'boolean') return
-  addTask.value.dir = result
+  const result = await invoke('window.selectFoloder')
+  if (result.cancel) {
+    MessagePlugin.info('取消选择')
+    return
+  }
+  config.value.aria2.dir = result.folder
 }
 </script>
 

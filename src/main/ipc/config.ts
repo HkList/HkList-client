@@ -1,6 +1,6 @@
 import { defineLoader } from '@main/loader.ts'
 import { success } from '@main/utils/response.ts'
-import { app, dialog } from 'electron'
+import { app } from 'electron'
 import { existsSync, mkdirsSync, readJSONSync, writeJsonSync } from 'fs-extra'
 import { join } from 'node:path'
 
@@ -60,9 +60,7 @@ if (!existsSync(downloadPath)) mkdirsSync(downloadPath)
 
 export let nowConfig = getConfig()
 
-export type SelectedFolder = string | boolean
-
-export default defineLoader((ipc, windows) => {
+export default defineLoader((ipc) => {
   ipc.handle('config.get', () => {
     return success(nowConfig)
   })
@@ -71,11 +69,5 @@ export default defineLoader((ipc, windows) => {
     saveConfig(config)
     nowConfig = getConfig()
     return success()
-  })
-
-  ipc.handle('config.selectFoloder', async () => {
-    if (!windows.main) return success(nowConfig.aria2.dir)
-    const result = await dialog.showOpenDialog(windows.main, { properties: ['openDirectory'] })
-    return success(result.canceled ? false : result.filePaths[0])
   })
 })

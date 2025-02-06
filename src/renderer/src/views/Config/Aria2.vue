@@ -24,8 +24,14 @@
         <t-input-number v-model="config.aria2.split" :min="1" />
       </t-form-item>
 
-      <t-form-item name="max-overall-download-limit" label="下载限速" @change="triggerChange">
+      <t-form-item
+        name="max-overall-download-limit"
+        label="下载限速"
+        @change="triggerChange"
+        help="0为不限速"
+      >
         <t-input-number v-model="config.aria2['max-overall-download-limit']" :min="0" />
+        <span style="margin-left: 10px">MB/s</span>
       </t-form-item>
 
       <t-form-item>
@@ -70,9 +76,12 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
 }
 
 const showSelectDir = async () => {
-  const result = await invoke('config.selectFoloder')
-  if (typeof result === 'boolean') return
-  config.value.aria2.dir = result
+  const result = await invoke('window.selectFoloder')
+  if (result.cancel) {
+    MessagePlugin.info('取消选择')
+    return
+  }
+  config.value.aria2.dir = result.folder
 }
 
 const restart = async () => {

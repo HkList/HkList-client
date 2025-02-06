@@ -1,4 +1,4 @@
-import type { Aria2ClientInputOptions, Aria2DownloadStatus, Conn } from '@huan_kong/maria2'
+import type { Aria2ClientInputOptions, Conn } from '@huan_kong/maria2'
 import { aria2, open } from '@huan_kong/maria2'
 import { nowConfig } from '@main/ipc/config.ts'
 import { defineLoader } from '@main/loader.ts'
@@ -12,6 +12,7 @@ import { existsSync } from 'node:fs'
 import { access, constants, unlink } from 'node:fs/promises'
 import { join } from 'node:path'
 import WebSocket from 'ws'
+import { sleep } from '@main/utils/sleep.ts'
 
 export const aria2Path = join(process.cwd(), 'aria2')
 export const aria2File = join(
@@ -120,6 +121,7 @@ export default defineLoader(async (ipc) => {
 
   ipc.handle('aria2.restart', async () => {
     await stopAria2()
+    await sleep(100)
     await startAria2()
     return success()
   })
@@ -168,7 +170,7 @@ export default defineLoader(async (ipc) => {
   ipc.handle('aria2.removeTask', async (_, params) => {
     await startAria2()
 
-    let tasks: Aria2DownloadStatus[] = await Promise.all(
+    const tasks = await Promise.all(
       params.gids.map(async (gid) => await aria2.tellStatus(client!, gid))
     )
 
@@ -205,7 +207,7 @@ export default defineLoader(async (ipc) => {
   ipc.handle('aria2.removeTaskResult', async (_, params) => {
     await startAria2()
 
-    let tasks: Aria2DownloadStatus[] = await Promise.all(
+    const tasks = await Promise.all(
       params.gids.map(async (gid) => await aria2.tellStatus(client!, gid))
     )
 
@@ -222,6 +224,20 @@ export default defineLoader(async (ipc) => {
     await startAria2()
     const task = await aria2.tellStatus(client!, params.gid)
     shell.openPath(task.dir)
+    return success()
+  })
+
+  ipc.handle('aria2.getGlobalOption', async () => {
+    await startAria2()
+    return success(await aria2.getGlobalOption(client!))
+  })
+
+  ipc.handle('aria2.changeGlobalOption', async (_, params) => {
+    await startAria2()
+    for (const key in params) {
+      if (typeof params[key] !== 'string') params[key] = params[key].toString()
+    }
+    await aria2.changeGlobalOption(client!, params)
     return success()
   })
 

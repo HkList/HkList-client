@@ -1,4 +1,4 @@
-import { MessagePlugin } from 'tdesign-vue-next'
+import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
 import type { Ref } from 'vue'
 import { onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'

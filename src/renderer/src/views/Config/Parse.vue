@@ -5,6 +5,14 @@
         <t-input v-model="config.parse.server" @change="triggerChange" />
       </t-form-item>
 
+      <t-form-item name="token" label="服务器卡密">
+        <t-input v-model="config.parse.token" @change="triggerChange" />
+      </t-form-item>
+
+      <t-form-item name="parse_password" label="服务器密码" help="无密码留空即可">
+        <t-input v-model="config.parse.parse_password" @change="triggerChange" />
+      </t-form-item>
+
       <t-form-item>
         <t-space size="small">
           <t-button type="submit"> 保存 </t-button>
@@ -21,8 +29,9 @@ import { useParseStore } from '@renderer/stores/parse.ts'
 import { useSaveFirst } from '@renderer/utils/use/useSaveFirst.ts'
 import { storeToRefs } from 'pinia'
 import type { FormProps } from 'tdesign-vue-next'
-import { MessagePlugin } from 'tdesign-vue-next'
 import { httpUrlValidator } from '@renderer/utils/httpUrlValidator.ts'
+import { formatBytes } from '@renderer/utils/format.ts'
+import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
 
 const configStore = useConfigStore()
 const { config } = storeToRefs(configStore)
@@ -35,7 +44,8 @@ const formRules: FormProps['rules'] = {
     {
       validator: httpUrlValidator
     }
-  ]
+  ],
+  token: [{ required: true, message: '请输入服务器卡密' }]
 }
 
 const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
@@ -47,6 +57,7 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
 }
 
 const parseStore = useParseStore()
+const { GetLimitRes, GetLimitError } = storeToRefs(parseStore)
 
 const getConfig = async () => {
   if (haveChanged.value) {
@@ -56,6 +67,17 @@ const getConfig = async () => {
 
   await parseStore.getConfig()
   MessagePlugin.success('测试连接成功')
+
+  await parseStore.getLimit()
+  if (GetLimitError.value === '') {
+    MessagePlugin.success('获取卡密配额成功')
+    const { count, size, expires_at } = GetLimitRes.value
+    MessagePlugin.success(`剩余下载量: ${formatBytes(size)}(${count})`)
+    MessagePlugin.success(`过期时间: ${expires_at}`)
+  }
+
+  await parseStore.getFileList(true)
+  MessagePlugin.success('服务器密码校验成功')
 }
 </script>
 

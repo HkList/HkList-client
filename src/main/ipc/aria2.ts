@@ -4,6 +4,7 @@ import { nowConfig } from '@main/ipc/config.ts'
 import { defineLoader } from '@main/loader.ts'
 import { getTaskName } from '@main/utils/aria2.ts'
 import { success } from '@main/utils/response.ts'
+import { sleep } from '@main/utils/sleep.ts'
 import { app, dialog, shell } from 'electron'
 import isPortReachable from 'is-port-reachable'
 import type { ChildProcessWithoutNullStreams } from 'node:child_process'
@@ -12,7 +13,6 @@ import { existsSync } from 'node:fs'
 import { access, constants, unlink } from 'node:fs/promises'
 import { join } from 'node:path'
 import WebSocket from 'ws'
-import { sleep } from '@main/utils/sleep.ts'
 
 export const aria2Path = join(process.cwd(), 'aria2')
 export const aria2File = join(

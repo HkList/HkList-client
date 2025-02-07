@@ -1,7 +1,7 @@
 import type { IpcEvents } from '@/src/main/ipc/type.ts'
 import { IpcEmitter } from '@electron-toolkit/typed-ipc/renderer'
+import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
 import NProgress from '@renderer/utils/progress.ts'
-import { MessagePlugin } from 'tdesign-vue-next'
 import { toRaw } from 'vue'
 
 const ipc = new IpcEmitter<IpcEvents>()
@@ -26,6 +26,7 @@ export const invoke = async <T extends keyof IpcEvents>(
   if (res.success) {
     return res.data
   } else {
+    console.log(res)
     MessagePlugin.error(res.message)
     return Promise.reject(res)
   }

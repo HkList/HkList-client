@@ -1,12 +1,18 @@
 import type {
+  Aria2ClientGlobalOptions,
   Aria2DownloadGid,
   Aria2DownloadStatus,
-  Aria2ServerVersion,
-  Aria2ClientGlobalOptions
+  Aria2ServerVersion
 } from '@huan_kong/maria2'
 import type { AddTask, GetTask, OpenTaskFolder, OperateTask, RemoveTask } from '@main/ipc/aria2.ts'
 import type { Config } from '@main/ipc/config.ts'
-import type { GetConfigRes, GetLimitReq, GetLimitRes } from '@main/ipc/parse.ts'
+import type {
+  GetConfigRes,
+  GetFileListReq,
+  GetFileListRes,
+  GetLimitReq,
+  GetLimitRes
+} from '@main/ipc/parse.ts'
 import type { IsMaximized, SelectedFolder } from '@main/ipc/window.ts'
 import type { SuccessResponse } from '@main/utils/response.ts'
 
@@ -39,6 +45,7 @@ export type BaseIpcEvents = {
 
   'parse.getLimit': (params: GetLimitReq) => GetLimitRes
   'parse.getConfig': () => GetConfigRes
+  'parse.getFileList': (params: GetFileListReq) => GetFileListRes
 }
 
 export type IpcEvents = {

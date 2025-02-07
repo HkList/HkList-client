@@ -1,55 +1,57 @@
 <template>
-  <t-card class="tasks">
-    <AddTask v-model="showAddTask" />
-    <t-tabs :value="selected" placement="left" @change="handlerChange" theme="card" class="tabs">
-      <t-tab-panel value="add">
-        <template #label>
-          <div class="tab-item">
-            <AddIcon style="margin-left: 3px" />
-            <span>添加任务</span>
-          </div>
-        </template>
-      </t-tab-panel>
-      <t-tab-panel value="all">
-        <template #label>
-          <div class="tab-item">
-            <ListIcon style="margin-left: 3px" />
-            <span>全部任务</span>
-          </div>
-        </template>
-        <TaskList :tasks="[...active, ...waiting, ...stopped]" />
-      </t-tab-panel>
-      <t-tab-panel value="active">
-        <template #label>
-          <div class="tab-item">
-            <PlayIcon size="20px" />
-            <span>正在下载</span>
-          </div>
-        </template>
-        <TaskList :tasks="active" />
-      </t-tab-panel>
-      <t-tab-panel value="waiting">
-        <template #label>
-          <div class="tab-item">
-            <PauseIcon size="20px" />
-            <span>正在等待</span>
-          </div>
-        </template>
-        <TaskList :tasks="waiting" />
-      </t-tab-panel>
-      <t-tab-panel value="stoped">
-        <template #label>
-          <div class="tab-item">
-            <RectangleFilledIcon size="10px" style="margin-left: 4px" />
-            <span>已完成/已停止</span>
-          </div>
-        </template>
-        <TaskList :tasks="stopped" />
-      </t-tab-panel>
-    </t-tabs>
-  </t-card>
+  <div class="container">
+    <t-card class="tasks">
+      <AddTask v-model="showAddTask" />
+      <t-tabs :value="selected" placement="left" @change="handlerChange" theme="card" class="tabs">
+        <t-tab-panel value="add">
+          <template #label>
+            <div class="tab-item">
+              <AddIcon style="margin-left: 3px" />
+              <span>添加任务</span>
+            </div>
+          </template>
+        </t-tab-panel>
+        <t-tab-panel value="all">
+          <template #label>
+            <div class="tab-item">
+              <ListIcon style="margin-left: 3px" />
+              <span>全部任务</span>
+            </div>
+          </template>
+          <TaskList :tasks="[...active, ...waiting, ...stopped]" />
+        </t-tab-panel>
+        <t-tab-panel value="active">
+          <template #label>
+            <div class="tab-item">
+              <PlayIcon size="20px" />
+              <span>正在下载</span>
+            </div>
+          </template>
+          <TaskList :tasks="active" />
+        </t-tab-panel>
+        <t-tab-panel value="waiting">
+          <template #label>
+            <div class="tab-item">
+              <PauseIcon size="20px" />
+              <span>正在等待</span>
+            </div>
+          </template>
+          <TaskList :tasks="waiting" />
+        </t-tab-panel>
+        <t-tab-panel value="stoped">
+          <template #label>
+            <div class="tab-item">
+              <RectangleFilledIcon size="10px" style="margin-left: 4px" />
+              <span>已完成/已停止</span>
+            </div>
+          </template>
+          <TaskList :tasks="stopped" />
+        </t-tab-panel>
+      </t-tabs>
+    </t-card>
 
-  <StatusBar />
+    <StatusBar />
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -115,5 +117,10 @@ onMounted(() => {
   .t-tabs__nav-item:nth-child(1) {
     margin-bottom: 50px;
   }
+}
+
+.container {
+  height: 100%;
+  position: relative;
 }
 </style>

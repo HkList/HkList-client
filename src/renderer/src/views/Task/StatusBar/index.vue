@@ -32,9 +32,9 @@ const showLimitDialog = () => {
 
 <style lang="scss">
 .fixed {
-  position: fixed;
-  bottom: 15px;
-  right: 15px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 
   .t-card__body {
     padding: 15px !important;

@@ -1,7 +1,8 @@
 import { defineLoader } from '@main/loader.ts'
 import { success } from '@main/utils/response.ts'
 import { app } from 'electron'
-import { existsSync, mkdirsSync, readJSONSync, writeJsonSync } from 'fs-extra'
+import { existsSync, watch } from 'fs'
+import { mkdirsSync, readJSONSync, writeJsonSync } from 'fs-extra'
 import { join } from 'node:path'
 
 const configPath = join(process.cwd(), '/config')
@@ -26,6 +27,8 @@ export interface Config {
   }
   parse: {
     server: string
+    token: string
+    parse_password: string
   }
   aria2: {
     dir: string
@@ -42,7 +45,9 @@ export const defaultConfig: Config = {
     theme: 'system'
   },
   parse: {
-    server: 'http://127.0.0.1:8000'
+    server: 'http://127.0.0.1:8000',
+    token: 'guest',
+    parse_password: ''
   },
   aria2: {
     dir: downloadPath,
@@ -61,6 +66,10 @@ if (!existsSync(downloadPath)) mkdirsSync(downloadPath)
 export let nowConfig = getConfig()
 
 export default defineLoader((ipc) => {
+  watch(configFile, () => {
+    nowConfig = getConfig()
+  })
+
   ipc.handle('config.get', () => {
     return success(nowConfig)
   })

@@ -10,7 +10,9 @@ export const useConfigStore = defineStore('config', () => {
       theme: 'system'
     },
     parse: {
-      server: ''
+      server: 'http://127.0.0.1:8000',
+      token: 'guest',
+      parse_password: ''
     },
     aria2: {
       dir: '',

@@ -29,6 +29,39 @@ export interface GetConfigRes {
   have_account: boolean
 }
 
+export interface GetFileListReq {
+  url: string
+  surl: string
+  pwd: string
+  dir: string
+  page?: number
+  num?: number
+  order?: 'time' | 'filename'
+  parse_password: string
+}
+
+export interface File {
+  category: number
+  fs_id: number
+  is_dir: boolean
+  local_ctime: number
+  local_mtime: number
+  md5: string
+  path: string
+  server_ctime: number
+  server_mtime: number
+  server_filename: string
+  size: number
+  dlink: string
+}
+
+export interface GetFileListRes {
+  uk: number
+  shareid: number
+  randsk: string
+  list: File[]
+}
+
 export default defineLoader((ipc) => {
   ipc.handle('parse.getConfig', async () => {
     const res = await hkListHttp.request<GetConfigRes>('get', getUrl('/user/parse/config'))
@@ -39,6 +72,17 @@ export default defineLoader((ipc) => {
     const res = await hkListHttp.request<GetLimitRes>('get', getUrl('/user/parse/limit'), {
       params
     })
+    return success(res)
+  })
+
+  ipc.handle('parse.getFileList', async (_, data) => {
+    const res = await hkListHttp.request<GetFileListRes>(
+      'post',
+      getUrl('/user/parse/get_file_list'),
+      {
+        data
+      }
+    )
     return success(res)
   })
 })

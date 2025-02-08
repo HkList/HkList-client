@@ -1,3 +1,4 @@
+// @ts-ignore
 import run from '@main/utils/fingerprint.js'
 import type { AxiosInstance, AxiosRequestConfig, CustomParamsSerializer, Method } from 'axios'
 import axios from 'axios'

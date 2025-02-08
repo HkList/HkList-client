@@ -2,7 +2,6 @@
   margin: 0;
   padding: 0;
   overflow-wrap: break-word;
-  -webkit-app-region: no-drag;
 }
 
 img {
@@ -28,6 +27,10 @@ body {
 .t-menu,
 .title > * {
   -webkit-app-region: drag;
+}
+
+.t-menu__item {
+  -webkit-app-region: no-drag;
 }
 
 .t-layout__content {

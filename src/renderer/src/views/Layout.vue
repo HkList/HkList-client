@@ -28,11 +28,13 @@
       </t-aside>
       <t-content>
         <div class="content">
-          <router-view v-slot="{ Component }">
+          <RouterView v-slot="{ Component }">
             <transition name="fade-right" mode="out-in">
-              <component :is="Component" />
+              <KeepAlive>
+                <component :is="Component" />
+              </KeepAlive>
             </transition>
-          </router-view>
+          </RouterView>
         </div>
       </t-content>
     </t-layout>

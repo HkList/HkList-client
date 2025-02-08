@@ -8,10 +8,14 @@ import type { AddTask, GetTask, OpenTaskFolder, OperateTask, RemoveTask } from '
 import type { Config } from '@main/ipc/config.ts'
 import type {
   GetConfigRes,
+  GetDownloadLinksReq,
+  GetDownLoadLinksRes,
   GetFileListReq,
   GetFileListRes,
   GetLimitReq,
-  GetLimitRes
+  GetLimitRes,
+  GetVcodeReq,
+  GetVcodeRes
 } from '@main/ipc/parse.ts'
 import type { IsMaximized, SelectedFolder } from '@main/ipc/window.ts'
 import type { SuccessResponse } from '@main/utils/response.ts'
@@ -46,6 +50,8 @@ export type BaseIpcEvents = {
   'parse.getLimit': (params: GetLimitReq) => GetLimitRes
   'parse.getConfig': () => GetConfigRes
   'parse.getFileList': (params: GetFileListReq) => GetFileListRes
+  'parse.getVcode': (params: GetVcodeReq) => GetVcodeRes
+  'parse.getDownloadLinks': (params: GetDownloadLinksReq) => GetDownLoadLinksRes
 }
 
 export type IpcEvents = {

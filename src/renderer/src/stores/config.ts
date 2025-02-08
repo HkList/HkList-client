@@ -1,4 +1,5 @@
 import type { Config } from '@/src/main/ipc/config.ts'
+import { MB } from '@renderer/utils/format.ts'
 import { invoke } from '@renderer/utils/invoke.ts'
 import { useDark } from '@renderer/utils/use/useDark.ts'
 import { defineStore } from 'pinia'
@@ -27,14 +28,14 @@ export const useConfigStore = defineStore('config', () => {
   const getConfig = async () => {
     config.value = await invoke('config.get')
     config.value.aria2['max-overall-download-limit'] =
-      config.value.aria2['max-overall-download-limit'] / 1024 / 1024
+      config.value.aria2['max-overall-download-limit'] / MB
     useDark()
   }
 
   const saveConfig = async () => {
     const tempConfig = toRaw(config.value)
     tempConfig.aria2['max-overall-download-limit'] =
-      tempConfig.aria2['max-overall-download-limit'] * 1024 * 1024
+      tempConfig.aria2['max-overall-download-limit'] * MB
     await invoke('config.set', tempConfig)
     useDark()
   }

@@ -36,6 +36,7 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "@vitejs/plugin-vue-jsx": "^4.1.1",
     "axios": "^1.7.9",
+    "dayjs": "^1.11.13",
     "dmg-builder": "^26.0.0",
     "electron": "^34.0.1",
     "electron-builder": "^26.0.0",

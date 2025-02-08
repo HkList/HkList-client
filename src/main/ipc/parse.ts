@@ -62,6 +62,37 @@ export interface GetFileListRes {
   list: File[]
 }
 
+export interface GetVcodeReq {
+  parse_password: string
+}
+
+export interface GetVcodeRes {
+  vcode_str: string
+  vcode_img: string
+}
+
+export interface GetDownloadLinksReq {
+  randsk: string
+  uk: number
+  shareid: number
+  fs_id: number[]
+  surl: string
+  dir: string
+  pwd: string
+  token: string
+  parse_password: string
+  vcode_str?: string
+  vcode_input?: string
+}
+
+export type GetDownLoadLinksRes = {
+  message: '请求成功'
+  filename: string
+  fs_id: number
+  ua: string
+  urls?: string[]
+}[]
+
 export default defineLoader((ipc) => {
   ipc.handle('parse.getConfig', async () => {
     const res = await hkListHttp.request<GetConfigRes>('get', getUrl('/user/parse/config'))
@@ -79,9 +110,23 @@ export default defineLoader((ipc) => {
     const res = await hkListHttp.request<GetFileListRes>(
       'post',
       getUrl('/user/parse/get_file_list'),
-      {
-        data
-      }
+      { data }
+    )
+    return success(res)
+  })
+
+  ipc.handle('parse.getVcode', async (_, data) => {
+    const res = await hkListHttp.request<GetVcodeRes>('post', getUrl('/user/parse/get_vcode'), {
+      data
+    })
+    return success(res)
+  })
+
+  ipc.handle('parse.getDownloadLinks', async (_, data) => {
+    const res = await hkListHttp.request<GetDownLoadLinksRes>(
+      'post',
+      getUrl('/user/parse/get_download_links'),
+      { data }
     )
     return success(res)
   })

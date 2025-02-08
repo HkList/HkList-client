@@ -48,10 +48,19 @@
         <t-input v-model.trim="GetFileListReq.dir" disabled />
       </t-form-item>
 
+      <template v-if="vcode.hit_captcha">
+        <t-form-item label="验证码图片" name="vcode_img">
+          <img :src="`${vcode.vcode_img}&t=${timestamp}`" @click="changeTimestamp" />
+        </t-form-item>
+        <t-form-item label="验证码字符" name="vcode_input">
+          <t-input v-model="vcode.vcode_input" />
+        </t-form-item>
+      </template>
+
       <t-form-item>
         <t-space size="small">
           <t-button type="submit"> 获取文件列表 </t-button>
-          <!-- <t-button @click="parseStore.getDownloadLinks"> 批量解析 </t-button> -->
+          <t-button @click="parseStore.getDownloadLinks"> 批量解析 </t-button>
         </t-space>
       </t-form-item>
     </t-form>
@@ -65,10 +74,18 @@ import { formatBytes } from '@renderer/utils/format.ts'
 import type { FormProps } from 'tdesign-vue-next'
 import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
 import { getUrlId } from '@renderer/utils/getUrlId.ts'
+import { ref } from 'vue'
 
 const parseStore = useParseStore()
-const { GetConfigRes, GetLimitReq, GetLimitRes, GetLimitError, GetFileListReq, GetFileListRes } =
-  storeToRefs(parseStore)
+const {
+  GetConfigRes,
+  GetLimitReq,
+  GetLimitRes,
+  GetLimitError,
+  GetFileListReq,
+  GetFileListRes,
+  vcode
+} = storeToRefs(parseStore)
 
 const parseUrl = () => {
   const res = getUrlId(GetFileListReq.value.url)
@@ -100,6 +117,12 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
   GetFileListReq.value.dir = '/'
   await parseStore.getFileList()
   MessagePlugin.success('获取成功')
+}
+
+const timestamp = ref(Date.now())
+
+const changeTimestamp = () => {
+  timestamp.value = Date.now()
 }
 </script>
 

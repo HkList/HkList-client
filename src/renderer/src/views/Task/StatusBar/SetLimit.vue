@@ -25,6 +25,7 @@ import { onMounted, ref } from 'vue'
 import { invoke } from '@renderer/utils/invoke.ts'
 import type { FormProps } from 'tdesign-vue-next'
 import type { Aria2ClientGlobalOptions } from '@huan_kong/maria2'
+import { MB } from '@renderer/utils/format.ts'
 
 const showDialog = defineModel()
 
@@ -43,7 +44,7 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
 
   await invoke('aria2.changeGlobalOption', {
     ...setLimit.value,
-    'max-overall-download-limit': (setLimit.value['max-overall-download-limit'] ?? 0) * 1024 * 1024
+    'max-overall-download-limit': (setLimit.value['max-overall-download-limit'] ?? 0) * MB
   })
   await getGlobalOptions()
 
@@ -52,7 +53,7 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
 
 const getGlobalOptions = async () => {
   const options = await invoke('aria2.getGlobalOption')
-  options['max-overall-download-limit'] = (options['max-overall-download-limit'] ?? 0) / 1024 / 1024
+  options['max-overall-download-limit'] = (options['max-overall-download-limit'] ?? 0) / MB
   setLimit.value = options
 }
 

@@ -29,7 +29,8 @@ body {
   -webkit-app-region: drag;
 }
 
-.t-menu__item {
+.t-menu__item,
+.control button {
   -webkit-app-region: no-drag;
 }
 

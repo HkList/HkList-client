@@ -62,7 +62,7 @@ import StatusBar from '@renderer/views/Task/StatusBar/index.vue'
 import { storeToRefs } from 'pinia'
 import { ListIcon, PauseIcon, PlayIcon, RectangleFilledIcon, AddIcon } from 'tdesign-icons-vue-next'
 import type { TabsProps } from 'tdesign-vue-next'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const selected = ref('all')
 const showAddTask = ref(false)
@@ -78,20 +78,22 @@ const handlerChange: TabsProps['onChange'] = (value) => {
 const taskStore = useTaskStore()
 const { active, stopped, waiting } = storeToRefs(taskStore)
 
-const getTask = () => {
-  taskStore.getAcitve()
-  taskStore.getStopped()
-  taskStore.getWaiting()
+const getTask = async () => {
+  try {
+    await Promise.all([taskStore.getAcitve(), taskStore.getStopped(), taskStore.getWaiting()])
+    return true
+  } catch (error) {
+    console.error('获取任务失败:', error)
+    return false
+  }
 }
 
-onMounted(() => {
-  getTask()
-  const id = setInterval(getTask, 100)
-
-  onUnmounted(() => {
-    clearInterval(id)
-  })
-})
+const startTaskPolling = async () => {
+  const success = await getTask()
+  const nextDelay = success ? 500 : 3000
+  setTimeout(startTaskPolling, nextDelay)
+}
+onMounted(startTaskPolling)
 </script>
 
 <style lang="scss" scoped>

@@ -98,7 +98,7 @@ const getDir = async (event: PointerEvent, path: string) => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .ico {
   width: 30px;
   height: 30px;

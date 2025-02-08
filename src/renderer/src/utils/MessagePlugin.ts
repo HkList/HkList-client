@@ -13,7 +13,7 @@ export const MessagePlugin = new Proxy(
           const params = typeof message === 'string' ? { content: message } : message
           if (!params.placement) params.placement = 'top-right'
           if (!params.closeBtn) params.closeBtn = true
-          return MessagePluginOrigin[key](params, duration)
+          return MessagePluginOrigin[key](params, duration ?? 5000)
         }
       } else {
         return MessagePluginOrigin[key]

@@ -68,11 +68,12 @@ const getConfig = async () => {
   await parseStore.getConfig()
   MessagePlugin.success('测试连接成功')
 
-  await parseStore.getLimit()
+  await parseStore.getLimit(true)
   if (GetLimitError.value === '') {
     MessagePlugin.success('获取卡密配额成功')
     const { count, size, expires_at } = GetLimitRes.value
-    MessagePlugin.success(`剩余下载量: ${formatBytes(size)}(${count})`)
+    MessagePlugin.success(`剩余解析大小: ${formatBytes(size)}`)
+    MessagePlugin.success(`剩余解析次数: ${count}`)
     MessagePlugin.success(`过期时间: ${expires_at}`)
   }
 

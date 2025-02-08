@@ -51,4 +51,13 @@ const router = createRouter({
   ]
 })
 
+let timer: number | null = null
+
+router.beforeEach((_to, _from, next) => {
+  document.body.classList.add('moving')
+  if (timer) window.clearInterval(timer)
+  timer = window.setTimeout(() => document.body.classList.remove('moving'), 700)
+  next()
+})
+
 export default router

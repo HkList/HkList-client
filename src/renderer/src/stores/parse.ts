@@ -1,9 +1,14 @@
-import type { GetConfigRes, GetFileListReq, GetLimitReq, GetLimitRes } from '@main/ipc/parse.ts'
+import type {
+  GetConfigRes,
+  GetFileListReq,
+  GetFileListRes,
+  GetLimitReq,
+  GetLimitRes
+} from '@main/ipc/parse.ts'
 import { useConfigStore } from '@renderer/stores/config.ts'
 import { invoke } from '@renderer/utils/invoke.ts'
 import { defineStore, storeToRefs } from 'pinia'
 import { ref, toRaw } from 'vue'
-import { GetFileListRes } from './../../../main/ipc/parse'
 
 const configStore = useConfigStore()
 const { config } = storeToRefs(configStore)
@@ -39,7 +44,8 @@ export const useParseStore = defineStore('parse', () => {
   })
   const GetLimitError = ref('')
 
-  const getLimit = async () => {
+  const getLimit = async (setConfig = false) => {
+    if (setConfig) GetLimitReq.value.token = config.value.parse.token
     try {
       const res = await invoke('parse.getLimit', GetLimitReq.value)
       GetLimitRes.value = res
@@ -48,6 +54,7 @@ export const useParseStore = defineStore('parse', () => {
       const res = error as { message: string }
       const message = res?.message
       if (message) GetLimitError.value = message
+      throw error
     }
   }
 

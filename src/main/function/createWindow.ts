@@ -2,6 +2,7 @@ import icon from '@/resources/icon.png?asset'
 import { is } from '@electron-toolkit/utils'
 import { defineLoader } from '@main/loader.ts'
 import { BrowserWindow, screen, shell } from 'electron'
+import contextMenu from 'electron-context-menu'
 import { autoUpdater } from 'electron-updater'
 import { join } from 'node:path'
 
@@ -20,6 +21,17 @@ export default defineLoader<BrowserWindow>(() => {
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
+    }
+  })
+
+  contextMenu({
+    showSelectAll: false,
+    showSearchWithGoogle: false,
+    labels: {
+      copy: '复制',
+      paste: '粘贴',
+      cut: '剪切',
+      inspect: '开发者工具'
     }
   })
 

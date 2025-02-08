@@ -40,6 +40,7 @@
     "electron": "^34.0.1",
     "electron-builder": "^26.0.0",
     "electron-builder-squirrel-windows": "^26.0.0",
+    "electron-context-menu": "^4.0.5",
     "electron-updater": "^6.3.9",
     "electron-vite": "3.0.0-beta.0",
     "fs-extra": "^11.3.0",

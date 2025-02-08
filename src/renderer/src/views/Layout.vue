@@ -107,6 +107,11 @@ const switchMaximize = async () => {
   }
 }
 
+.header,
+.t-layout__sider {
+  opacity: 0.95;
+}
+
 .main {
   height: calc(100% - 66px);
 }

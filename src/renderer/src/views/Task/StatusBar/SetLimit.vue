@@ -24,7 +24,7 @@
 import { onMounted, ref } from 'vue'
 import { invoke } from '@renderer/utils/invoke.ts'
 import type { FormProps } from 'tdesign-vue-next'
-import { Aria2ClientGlobalOptions } from '@huan_kong/maria2/index.js'
+import type { Aria2ClientGlobalOptions } from '@huan_kong/maria2'
 
 const showDialog = defineModel()
 

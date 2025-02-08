@@ -6,8 +6,12 @@ import { toRaw } from 'vue'
 
 const ipc = new IpcEmitter<IpcEvents>()
 
-const ignoreMethods = [
+const ignoreMethods: (keyof IpcEvents)[] = [
   'window.getIsMaximized',
+  'window.minimize',
+  'window.maximize',
+  'window.unMaximize',
+  'window.selectFoloder',
   'aria2.getActive',
   'aria2.getWaiting',
   'aria2.getStopped'

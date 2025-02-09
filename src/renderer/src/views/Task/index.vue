@@ -90,7 +90,7 @@ const getTask = async () => {
 
 const startTaskPolling = async () => {
   const success = await getTask()
-  const nextDelay = success ? 500 : 3000
+  const nextDelay = success ? 500 : 5000
   setTimeout(startTaskPolling, nextDelay)
 }
 onMounted(startTaskPolling)
@@ -119,10 +119,5 @@ onMounted(startTaskPolling)
   .t-tabs__nav-item:nth-child(1) {
     margin-bottom: 50px;
   }
-}
-
-.container {
-  height: 100%;
-  position: relative;
 }
 </style>

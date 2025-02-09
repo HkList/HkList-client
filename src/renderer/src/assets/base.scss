@@ -72,6 +72,15 @@ body {
   margin-left: 5px !important;
 }
 
+.container {
+  height: 100%;
+  position: relative;
+}
+
+.t-loading--center {
+  display: flex !important;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

@@ -45,8 +45,8 @@ export const defaultConfig: Config = {
     theme: 'system'
   },
   parse: {
-    server: 'http://127.0.0.1:8000',
-    token: 'guest',
+    server: '',
+    token: '',
     parse_password: ''
   },
   aria2: {

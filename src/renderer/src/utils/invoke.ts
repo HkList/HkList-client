@@ -17,7 +17,7 @@ const ignoreMethods: (keyof IpcEvents)[] = [
   'aria2.getStopped'
 ]
 
-const ignoreMessages = ['请先前往配置管理设置解析服务器']
+const ignoreMessages: string[] = ['aria2 启动失败']
 
 export const invoke = async <T extends keyof IpcEvents>(
   method: Extract<T, string>,
@@ -32,8 +32,8 @@ export const invoke = async <T extends keyof IpcEvents>(
   if (res.success) {
     return res.data
   } else {
-    console.log(res)
-    if (!ignoreMessages.includes(res.message)) MessagePlugin.error(res.message)
+    console.log('IPC调用错误:', res)
+    if (!ignoreMessages.every((msg) => res.message.includes(msg))) MessagePlugin.error(res.message)
     return Promise.reject(res)
   }
 }

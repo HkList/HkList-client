@@ -18,7 +18,8 @@ export function checkIsAria2Error(error: unknown): error is Aria2Error {
 }
 
 export function handleError(error: unknown) {
-  console.log(error)
+  console.error('未被捕获的错误:', error)
+  console.error(new Error().stack)
 
   if (error instanceof AxiosError) {
     if (error.response?.data?.message) {

@@ -49,8 +49,7 @@ export const useParseStore = defineStore('parse', () => {
   })
   const GetLimitError = ref('')
 
-  const getLimit = async (setConfig = false) => {
-    if (setConfig) GetLimitReq.value.token = config.value.parse.token
+  const getLimit = async () => {
     try {
       const res = await invoke('parse.getLimit', GetLimitReq.value)
       GetLimitRes.value = res
@@ -91,6 +90,7 @@ export const useParseStore = defineStore('parse', () => {
         }
       : toRaw(GetFileListReq.value)
     const res = await invoke('parse.getFileList', req)
+    if (sample) return
     GetFileListRes.value = res
     if (GetFileListReq.value.dir !== '/') {
       GetFileListRes.value.list.unshift({
@@ -214,7 +214,7 @@ export const useParseStore = defineStore('parse', () => {
     } finally {
       pending.value = false
       await getLimit()
-      await configStore.getConfig()
+      await getConfig()
     }
 
     return true

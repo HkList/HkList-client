@@ -1,6 +1,6 @@
 {
   "name": "hklist-client",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "HkList 客户端程序",
   "main": "./out/main/index.js",
   "author": "huan_kong",
@@ -20,13 +20,11 @@
     "build:mac": "npm run build && electron-builder --mac",
     "build:linux": "npm run build && electron-builder --linux"
   },
-  "dependencies": {
-    "@electron-toolkit/preload": "^3.0.1",
-    "@electron-toolkit/utils": "^4.0.0"
-  },
   "devDependencies": {
+    "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@electron-toolkit/typed-ipc": "^1.0.2",
+    "@electron-toolkit/utils": "^4.0.0",
     "@huan_kong/maria2": "^0.3.4",
     "@intlify/core-base": "^11.0.1",
     "@types/node": "^22.12.0",
@@ -63,5 +61,14 @@
     "vue-router": "^4.5.0",
     "vue-tsc": "^2.2.0",
     "ws": "^8.18.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "bufferutil",
+      "electron",
+      "esbuild",
+      "utf-8-validate",
+      "vue-demi"
+    ]
   }
 }

@@ -37,7 +37,7 @@ export const useConfigStore = defineStore('config', () => {
     tempConfig.aria2['max-overall-download-limit'] =
       tempConfig.aria2['max-overall-download-limit'] * MB
     await invoke('config.set', tempConfig)
-    useDark()
+    await getConfig()
   }
 
   return { config, getConfig, saveConfig }

@@ -7,20 +7,19 @@ settings:
 importers:
 
   .:
-    dependencies:
+    devDependencies:
       '@electron-toolkit/preload':
         specifier: ^3.0.1
         version: 3.0.1(electron@34.0.1)
-      '@electron-toolkit/utils':
-        specifier: ^4.0.0
-        version: 4.0.0(electron@34.0.1)
-    devDependencies:
       '@electron-toolkit/tsconfig':
         specifier: ^1.0.1
         version: 1.0.1(@types/node@22.12.0)
       '@electron-toolkit/typed-ipc':
         specifier: ^1.0.2
         version: 1.0.2(@electron-toolkit/preload@3.0.1(electron@34.0.1))(electron@34.0.1)
+      '@electron-toolkit/utils':
+        specifier: ^4.0.0
+        version: 4.0.0(electron@34.0.1)
       '@huan_kong/maria2':
         specifier: ^0.3.4
         version: 0.3.4(bufferutil@4.0.9)(utf-8-validate@6.0.5)

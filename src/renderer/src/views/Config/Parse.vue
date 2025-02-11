@@ -57,7 +57,7 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
 }
 
 const parseStore = useParseStore()
-const { GetLimitRes, GetLimitError } = storeToRefs(parseStore)
+const { GetLimitReq, GetLimitRes, GetFileListReq, GetLimitError } = storeToRefs(parseStore)
 
 const getConfig = async () => {
   if (haveChanged.value) {
@@ -68,7 +68,10 @@ const getConfig = async () => {
   await parseStore.getConfig()
   MessagePlugin.success('测试连接成功')
 
-  await parseStore.getLimit(true)
+  GetLimitReq.value.token = config.value.parse.token
+  GetFileListReq.value.parse_password = config.value.parse.parse_password
+
+  await parseStore.getLimit()
   if (GetLimitError.value === '') {
     MessagePlugin.success('获取卡密配额成功')
     const { count, size, expires_at } = GetLimitRes.value

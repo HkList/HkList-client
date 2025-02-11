@@ -36,7 +36,7 @@ const complete = ref(0)
 const timer = ref(0)
 
 function process() {
-  complete.value += Math.floor(Math.random() * 25)
+  complete.value += Math.floor(Math.random() * 10)
   if (complete.value >= 100) {
     complete.value = 100
     router.push('/')
@@ -70,6 +70,8 @@ onBeforeUnmount(() => clearTimeout(timer.value))
 
   .container {
     width: 70vw;
+    height: auto !important;
+
     .font-h1 {
       font-size: 120px;
     }

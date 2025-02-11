@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 v-if="config.parse.server === ''">请先前往配置管理设置解析服务器</h1>
+    <h1 v-if="config.parse.server === ''">请先前往配置管理设置解析服务器哦~</h1>
     <template v-else>
       <div class="flex" v-if="ready">
         <Announce />
@@ -19,29 +19,32 @@ import Form from '@renderer/views/Parse/Form.vue'
 import FileList from '@renderer/views/Parse/FileList.vue'
 import LinkList from '@renderer/views/Parse/LinkList.vue'
 import { useParseStore } from '@renderer/stores/parse.ts'
-import { onMounted, ref } from 'vue'
+import { onActivated, ref } from 'vue'
 import { useConfigStore } from '@renderer/stores/config.ts'
 import { storeToRefs } from 'pinia'
-import { sleep } from '@/src/main/utils/sleep.ts'
+import { onMounted } from 'vue'
 
 const configStore = useConfigStore()
 const { config } = storeToRefs(configStore)
 
 const ready = ref(false)
 const parseStore = useParseStore()
+const { GetLimitReq, GetFileListReq } = storeToRefs(parseStore)
 
-const Init = async () => {
-  try {
-    await parseStore.getConfig()
-    await parseStore.getLimit()
-    ready.value = true
-  } catch (error) {
-    await sleep(1000)
-    await Init()
-  }
-}
+// 进入页面自动更新 token
+onMounted(() => {
+  GetLimitReq.value.token = config.value.parse.token
+  GetFileListReq.value.parse_password = config.value.parse.parse_password
+})
 
-onMounted(Init)
+// 激活页面后自动获取数据
+onActivated(async () => {
+  if (config.value.parse.server === '') return
+
+  await parseStore.getConfig()
+  await parseStore.getLimit()
+  ready.value = true
+})
 </script>
 
 <style lang="scss" scoped>

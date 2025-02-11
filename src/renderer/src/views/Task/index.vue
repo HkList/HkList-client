@@ -2,6 +2,7 @@
   <div class="container">
     <t-card class="tasks">
       <AddTask v-model="showAddTask" />
+
       <t-tabs :value="selected" placement="left" @change="handlerChange" theme="card" class="tabs">
         <t-tab-panel value="add">
           <template #label>
@@ -62,7 +63,8 @@ import StatusBar from '@renderer/views/Task/StatusBar/index.vue'
 import { storeToRefs } from 'pinia'
 import { ListIcon, PauseIcon, PlayIcon, RectangleFilledIcon, AddIcon } from 'tdesign-icons-vue-next'
 import type { TabsProps } from 'tdesign-vue-next'
-import { onMounted, ref } from 'vue'
+import { onActivated, onDeactivated, ref } from 'vue'
+import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
 
 const selected = ref('all')
 const showAddTask = ref(false)
@@ -83,17 +85,27 @@ const getTask = async () => {
     await Promise.all([taskStore.getAcitve(), taskStore.getStopped(), taskStore.getWaiting()])
     return true
   } catch (error) {
-    console.error('获取任务失败:', error)
+    MessagePlugin.error((error as { message?: string })?.message ?? '未知错误')
     return false
   }
 }
 
+const componentActive = ref(false)
 const startTaskPolling = async () => {
   const success = await getTask()
   const nextDelay = success ? 500 : 5000
-  setTimeout(startTaskPolling, nextDelay)
+  if (!componentActive.value) return
+  window.setTimeout(startTaskPolling, nextDelay)
 }
-onMounted(startTaskPolling)
+
+onActivated(() => {
+  componentActive.value = true
+  startTaskPolling()
+})
+
+onDeactivated(() => {
+  componentActive.value = false
+})
 </script>
 
 <style lang="scss" scoped>

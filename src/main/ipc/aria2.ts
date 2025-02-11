@@ -5,7 +5,7 @@ import { defineLoader } from '@main/loader.ts'
 import { getTaskName } from '@main/utils/aria2.ts'
 import { success } from '@main/utils/response.ts'
 import { sleep } from '@main/utils/sleep.ts'
-import { app, dialog, shell } from 'electron'
+import { app, shell } from 'electron'
 import isPortReachable from 'is-port-reachable'
 import type { ChildProcessWithoutNullStreams } from 'node:child_process'
 import { spawn } from 'node:child_process'
@@ -102,12 +102,7 @@ export interface OpenTaskFolder {
 export default defineLoader(async (ipc) => {
   try {
     await startAria2()
-  } catch (error) {
-    console.log(error)
-    if (error instanceof Error) {
-      dialog.showErrorBox('aria2 启动失败', error.message)
-    }
-  }
+  } catch (error) {}
 
   ipc.handle('aria2.start', async () => {
     await startAria2()
@@ -195,11 +190,16 @@ export default defineLoader(async (ipc) => {
           try {
             await access(path, constants.F_OK)
             await unlink(path)
+          } catch (error) {
+            console.error('删除原文件失败:', error)
+          }
+
+          try {
             const aria2FilePath = path + '.aria2'
             await access(aria2FilePath, constants.F_OK)
             await unlink(aria2FilePath)
           } catch (error) {
-            console.log('删除文件失败', error)
+            console.error('删除Aria2文件失败:', error)
           }
         })
       )

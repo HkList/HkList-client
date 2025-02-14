@@ -6,7 +6,7 @@
         <p>{{ filename }}</p>
         <p>{{ formatBytes(task.completedLength) }} / {{ formatBytes(task.totalLength) }}</p>
       </t-space>
-      <p>
+      <p class="status">
         {{
           task.status === 'active'
             ? `${formatBytes(task.downloadSpeed)}/s`
@@ -18,21 +18,22 @@
 
     <template #action>
       <t-space class="gap-action">
-        <template v-if="task.status === 'removed'">
-          <t-link theme="primary" @click="removeTaskDownloadResult"> 删除任务 </t-link>
-        </template>
-        <template v-else>
-          <t-link theme="primary" v-if="task.status === 'active'" @click="pauseTask"> 暂停 </t-link>
-          <t-link theme="primary" v-else @click="unpauseTask"> 开始 </t-link>
-          <t-popconfirm
-            theme="danger"
-            content="是否要删除文件"
-            @cancel="removeTask(false)"
-            @confirm="removeTask(true)"
-          >
-            <t-link theme="primary"> 删除任务 </t-link>
-          </t-popconfirm>
-        </template>
+        <t-link theme="primary" v-if="task.status === 'active'" @click="pauseTask"> 暂停 </t-link>
+        <t-link theme="primary" v-if="task.status === 'paused'" @click="unpauseTask"> 开始 </t-link>
+
+        <t-link theme="primary" @click="removeTaskDownloadResult" v-if="task.status === 'removed'">
+          删除任务
+        </t-link>
+        <t-popconfirm
+          theme="danger"
+          content="是否要删除文件"
+          @cancel="removeTask(false)"
+          @confirm="removeTask(true)"
+          v-else
+        >
+          <t-link theme="primary"> 删除任务 </t-link>
+        </t-popconfirm>
+
         <t-link theme="primary" @click="openTaskFolder"> 打开文件位置 </t-link>
       </t-space>
     </template>
@@ -45,7 +46,7 @@ import { calcProgress, getTaskName, matchStatus } from '@main/utils/aria2'
 import Progress from '@renderer/components/Progress.vue'
 import { formatBytes } from '@renderer/utils/format.ts'
 import { getFileIcon } from '@renderer/utils/genFileIcon.ts'
-import { invoke } from '@renderer/utils/invoke.ts'
+import { invoke } from '@renderer/utils/ipc.ts'
 import { ref, watch } from 'vue'
 
 const { task } = defineProps<{ task: Aria2DownloadStatus }>()
@@ -83,10 +84,6 @@ const openTaskFolder = async () => {
 </script>
 
 <style lang="scss" scoped>
-.image {
-  width: 50px;
-}
-
 .flex {
   display: flex;
   width: 100%;
@@ -94,14 +91,43 @@ const openTaskFolder = async () => {
   align-items: center;
   gap: 10px;
 }
+</style>
 
-.gap {
-  gap: 5px !important;
-  align-items: center;
+<style lang="scss">
+.flex {
+  .image {
+    width: 50px;
+  }
+
+  .gap {
+    gap: 5px !important;
+
+    p {
+      width: 180px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      text-align: center;
+    }
+  }
+
+  .status {
+    width: 100px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: center;
+  }
 }
 
 .gap-action {
+  min-width: 180px;
   gap: 5px !important;
   margin-left: 10px;
+  justify-content: flex-end;
+
+  .t-space-item {
+    width: fit-content;
+  }
 }
 </style>

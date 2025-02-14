@@ -22,7 +22,7 @@
 
 <script lang="tsx" setup>
 import { onMounted, ref } from 'vue'
-import { invoke } from '@renderer/utils/invoke.ts'
+import { invoke } from '@renderer/utils/ipc.ts'
 import type { FormProps } from 'tdesign-vue-next'
 import type { Aria2ClientGlobalOptions } from '@huan_kong/maria2'
 import { MB } from '@renderer/utils/format.ts'
@@ -60,10 +60,4 @@ const getGlobalOptions = async () => {
 onMounted(getGlobalOptions)
 </script>
 
-<style lang="scss" scoped>
-.input {
-  display: flex;
-  gap: 20px;
-  width: 100%;
-}
-</style>
+<style lang="scss" scoped></style>

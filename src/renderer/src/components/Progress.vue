@@ -24,7 +24,6 @@ const {
   position: relative;
   border-radius: 3px;
   overflow: hidden;
-  position: relative;
 
   .progress-inner {
     height: 100%;

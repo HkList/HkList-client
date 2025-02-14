@@ -31,7 +31,10 @@ body {
 
 .t-menu__item,
 .control button,
-.t-message__close {
+.t-message__close,
+#__vue-devtools-container__,
+#vue-inspector-container,
+.vue-devtools-frame {
   -webkit-app-region: no-drag;
 }
 
@@ -74,7 +77,6 @@ body {
 
 .container {
   height: 100%;
-  position: relative;
 }
 
 .t-loading--center {

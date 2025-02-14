@@ -5,9 +5,9 @@ import { existsSync, watch } from 'fs'
 import { mkdirsSync, readJSONSync, writeJsonSync } from 'fs-extra'
 import { join } from 'node:path'
 
-const configPath = join(process.cwd(), '/config')
-const configFile = join(configPath, '/config.json')
-const downloadPath = join(app.getPath('downloads'), 'hklist-client')
+export const configPath = join(process.cwd(), '/config')
+export const configFile = join(configPath, '/config.json')
+export const downloadPath = join(app.getPath('downloads'), 'hklist-client')
 
 export const getConfig = (): Config => {
   const json = readJSONSync(configFile)

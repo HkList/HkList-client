@@ -1,9 +1,10 @@
-import { resolve } from 'path'
-import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import Components from 'unplugin-vue-components/vite'
+import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
+import { resolve } from 'path'
 import { TDesignResolver } from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite'
+import vueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
   main: {
@@ -22,6 +23,7 @@ export default defineConfig({
     plugins: [
       vue(),
       vueJsx(),
+      vueDevTools(),
       Components({
         dirs: ['public'],
         resolvers: [

@@ -9,11 +9,12 @@ import type {
 } from '@main/ipc/parse.ts'
 import { useConfigStore } from '@renderer/stores/config.ts'
 import { formatBytes } from '@renderer/utils/format.ts'
-import { invoke } from '@renderer/utils/invoke.ts'
+import { invoke } from '@renderer/utils/ipc.ts'
 import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
 import { defineStore, storeToRefs } from 'pinia'
-import type { TableProps } from 'tdesign-vue-next'
+import type { MessageInstance, TableProps } from 'tdesign-vue-next'
 import { ref, toRaw } from 'vue'
+import { chunk } from '../utils/array.ts'
 
 const configStore = useConfigStore()
 const { config } = storeToRefs(configStore)
@@ -173,20 +174,49 @@ export const useParseStore = defineStore('parse', () => {
 
     try {
       pending.value = true
-      const res = await invoke('parse.getDownloadLinks', {
-        randsk: GetFileListRes.value!.randsk,
-        uk: GetFileListRes.value!.uk,
-        shareid: GetFileListRes.value!.shareid,
-        fs_id: typeof event === 'number' ? [event] : rows.map((v) => v.fs_id),
-        surl: GetFileListReq.value.surl,
-        dir: GetFileListReq.value.dir,
-        pwd: GetFileListReq.value.pwd,
-        token: GetLimitReq.value.token,
-        parse_password: GetFileListReq.value.parse_password,
-        ...(vcode.value.hit_captcha
-          ? { vcode_str: vcode.value.vcode_str, vcode_input: vcode.value.vcode_input }
-          : {})
-      })
+      let res: GetDownLoadLinksRes = []
+
+      if (typeof event === 'number') {
+        res = await invoke('parse.getDownloadLinks', {
+          randsk: GetFileListRes.value!.randsk,
+          uk: GetFileListRes.value!.uk,
+          shareid: GetFileListRes.value!.shareid,
+          fs_id: [event],
+          surl: GetFileListReq.value.surl,
+          dir: GetFileListReq.value.dir,
+          pwd: GetFileListReq.value.pwd,
+          token: GetLimitReq.value.token,
+          parse_password: GetFileListReq.value.parse_password,
+          ...(vcode.value.hit_captcha
+            ? { vcode_str: vcode.value.vcode_str, vcode_input: vcode.value.vcode_input }
+            : {})
+        })
+      } else {
+        // 把 rows 拆成 5 个一份
+        const chunks = chunk(rows, 5)
+        let message: MessageInstance | null = null
+        for (let i = 0; i < chunks.length; i++) {
+          if (message) message.close()
+          message = await MessagePlugin.info(`正在解析第${i + 1}/${chunks.length}个区块`, 9999999)
+          const chunkRes = await invoke('parse.getDownloadLinks', {
+            randsk: GetFileListRes.value!.randsk,
+            uk: GetFileListRes.value!.uk,
+            shareid: GetFileListRes.value!.shareid,
+            fs_id: chunks[i].map((v) => v.fs_id),
+            surl: GetFileListReq.value.surl,
+            dir: GetFileListReq.value.dir,
+            pwd: GetFileListReq.value.pwd,
+            token: GetLimitReq.value.token,
+            parse_password: GetFileListReq.value.parse_password,
+            ...(vcode.value.hit_captcha
+              ? { vcode_str: vcode.value.vcode_str, vcode_input: vcode.value.vcode_input }
+              : {})
+          })
+          res.push(...chunkRes)
+        }
+        if (message) message.close()
+      }
+
       if (typeof event === 'number') {
         MessagePlugin.success('重新解析成功')
         return res
@@ -194,6 +224,7 @@ export const useParseStore = defineStore('parse', () => {
         MessagePlugin.success('解析成功,下滑查看解析结果')
         GetDownLoadLinksRes.value = res
       }
+
       vcode.value.hit_captcha = false
     } catch (_error) {
       const error = _error as { response: { data: { message: string } } }

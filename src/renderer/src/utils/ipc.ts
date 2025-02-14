@@ -1,10 +1,11 @@
-import type { IpcEvents } from '@/src/main/ipc/type.ts'
-import { IpcEmitter } from '@electron-toolkit/typed-ipc/renderer'
+import type { IpcEvents, IpcRendererEvent } from '@/src/main/ipc/type.ts'
+import { IpcEmitter, IpcListener } from '@electron-toolkit/typed-ipc/renderer'
 import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
 import NProgress from '@renderer/utils/progress.ts'
 import { toRaw } from 'vue'
 
-const ipc = new IpcEmitter<IpcEvents>()
+export const emitter = new IpcEmitter<IpcEvents>()
+export const ipc = new IpcListener<IpcRendererEvent>()
 
 const ignoreMethods: (keyof IpcEvents)[] = [
   'window.getIsMaximized',
@@ -27,7 +28,7 @@ export const invoke = async <T extends keyof IpcEvents>(
   args = args.map((arg) => toRaw(arg)) as Parameters<IpcEvents[T]>
   const inIgnoreMethods = ignoreMethods.includes(method)
   if (!inIgnoreMethods) NProgress.start()
-  const res = await ipc.invoke(method, ...args)
+  const res = await emitter.invoke(method, ...args)
   if (!inIgnoreMethods) NProgress.done()
   if (res.success) {
     return res.data

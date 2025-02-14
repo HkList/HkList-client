@@ -172,12 +172,13 @@ export default defineLoader(async (ipc) => {
     await Promise.all(
       tasks.map(async (task) => {
         return await (async () => {
-          if (task.status === 'active') {
-            await aria2.forcePause(client!, task.gid)
-            await aria2.remove(client!, task.gid)
-          } else {
+          if (task.status === 'complete') {
             await aria2.removeDownloadResult(client!, task.gid)
+            return
           }
+
+          if (task.status === 'active') await aria2.forcePause(client!, task.gid)
+          await aria2.remove(client!, task.gid)
         })()
       })
     )

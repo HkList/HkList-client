@@ -1,5 +1,5 @@
 import type { Aria2DownloadStatus } from '@huan_kong/maria2'
-import { invoke } from '@renderer/utils/invoke.ts'
+import { invoke } from '@renderer/utils/ipc.ts'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 

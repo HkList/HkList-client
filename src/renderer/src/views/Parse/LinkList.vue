@@ -46,7 +46,7 @@ import { ref, watch } from 'vue'
 import { copy } from '@renderer/utils/copy.ts'
 import { LinkIcon } from 'tdesign-icons-vue-next'
 import type { GetDownLoadLinksRes } from '@main/ipc/parse.ts'
-import { invoke } from '@renderer/utils/invoke.ts'
+import { invoke } from '@renderer/utils/ipc.ts'
 import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
 
 const parseStore = useParseStore()

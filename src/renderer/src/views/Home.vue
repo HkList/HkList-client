@@ -12,6 +12,12 @@
       </template>
       账号管理
     </t-menu-item>
+    <t-menu-item value="/record">
+      <template #icon>
+        <HistoryIcon />
+      </template>
+      解析记录
+    </t-menu-item>
     <t-menu-item value="/task">
       <template #icon>
         <DownloadIcon />
@@ -31,7 +37,7 @@
 
 <script lang="ts" setup>
 import Layout from '@renderer/views/Layout.vue'
-import { AppIcon, DownloadIcon, ToolsIcon, UserIcon } from 'tdesign-icons-vue-next'
+import { AppIcon, DownloadIcon, ToolsIcon, UserIcon, HistoryIcon } from 'tdesign-icons-vue-next'
 </script>
 
 <style lang="scss" scoped></style>

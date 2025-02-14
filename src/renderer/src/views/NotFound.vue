@@ -45,8 +45,7 @@ function process() {
   }
 }
 
-const processInterval = () =>
-  (timer.value = window.setTimeout(process, Math.random() * (1000 - 500) + 500))
+const processInterval = () => (timer.value = window.setTimeout(process, Math.random() * 500))
 
 onMounted(() => processInterval())
 

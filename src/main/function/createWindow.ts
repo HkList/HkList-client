@@ -1,18 +1,25 @@
 import icon from '@/resources/icon.png?asset'
 import { is } from '@electron-toolkit/utils'
+import { configPath } from '@main/ipc/config.ts'
 import { defineLoader } from '@main/loader.ts'
 import { BrowserWindow, screen, shell } from 'electron'
 import contextMenu from 'electron-context-menu'
 import { autoUpdater } from 'electron-updater'
+import WindowStateKeeper from 'electron-window-state'
 import { join } from 'node:path'
 
-const width = 1170
-const height = 750
+const width = 1250
+const height = 800
 
 export default defineLoader<BrowserWindow>(() => {
+  let mainWindowState = WindowStateKeeper({
+    defaultWidth: width,
+    defaultHeight: height,
+    path: configPath
+  })
+
   const mainWindow = new BrowserWindow({
-    width,
-    height,
+    ...mainWindowState,
     minWidth: width,
     minHeight: height,
     show: false,
@@ -23,6 +30,8 @@ export default defineLoader<BrowserWindow>(() => {
       sandbox: false
     }
   })
+
+  mainWindowState.manage(mainWindow)
 
   contextMenu({
     showSelectAll: false,

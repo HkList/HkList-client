@@ -6,10 +6,7 @@
       </t-form-item>
 
       <t-form-item label="保存位置" name="dir">
-        <div class="input">
-          <t-input v-model="addTask.dir" />
-          <t-button @click="showSelectDir">选择</t-button>
-        </div>
+        <SelectDir v-model="addTask.dir" />
       </t-form-item>
 
       <t-form-item label="线程数" name="split">
@@ -39,9 +36,10 @@ import type { FormProps, TableProps } from 'tdesign-vue-next'
 import { Input } from 'tdesign-vue-next'
 import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
 import { httpUrlValidator } from '@renderer/utils/httpUrlValidator.ts'
-import { invoke } from '@renderer/utils/invoke.ts'
+import { invoke } from '@renderer/utils/ipc.ts'
 import { useConfigStore } from '@renderer/stores/config.ts'
 import { storeToRefs } from 'pinia'
+import SelectDir from '@renderer/components/SelectDir.vue'
 
 const configStore = useConfigStore()
 const { config } = storeToRefs(configStore)
@@ -157,21 +155,6 @@ const columns: TableProps['columns'] = [
     )
   }
 ]
-
-const showSelectDir = async () => {
-  const result = await invoke('window.selectFoloder')
-  if (result.cancel) {
-    MessagePlugin.info('取消选择')
-    return
-  }
-  config.value.aria2.dir = result.folder
-}
 </script>
 
-<style lang="scss" scoped>
-.input {
-  display: flex;
-  gap: 20px;
-  width: 100%;
-}
-</style>
+<style lang="scss" scoped></style>

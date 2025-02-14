@@ -1,3 +1,4 @@
+import type { ClipboardObserverData } from '@huan_kong/electron-clipboard-observer'
 import type {
   Aria2ClientGlobalOptions,
   Aria2DownloadGid,
@@ -27,6 +28,7 @@ export type BaseIpcEvents = {
   'window.getIsMaximized': () => IsMaximized
   'window.close': () => null
   'window.selectFoloder': () => SelectedFolder
+  'window.alert': () => null
 
   'config.get': () => Config
   'config.set': (config: Config) => null
@@ -58,4 +60,8 @@ export type IpcEvents = {
   [K in keyof BaseIpcEvents]: BaseIpcEvents[K] extends (...args: infer P) => infer R
     ? (...args: P) => SuccessResponse<R>
     : never
+}
+
+export type IpcRendererEvent = {
+  'clipboard.change': [ClipboardObserverData]
 }

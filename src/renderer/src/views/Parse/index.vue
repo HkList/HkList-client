@@ -41,8 +41,11 @@ onMounted(() => {
 onActivated(async () => {
   if (config.value.parse.server === '') return
 
-  await parseStore.getConfig()
-  await parseStore.getLimit()
+  try {
+    await parseStore.getConfig()
+    await parseStore.getLimit()
+  } catch (error) {}
+
   ready.value = true
 })
 </script>

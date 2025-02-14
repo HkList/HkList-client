@@ -1,5 +1,5 @@
 <template>
-  <t-card> template Account </t-card>
+  <t-card> template Record </t-card>
 </template>
 
 <script lang="ts" setup></script>

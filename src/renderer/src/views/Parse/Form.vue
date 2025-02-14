@@ -75,6 +75,9 @@ import type { FormProps } from 'tdesign-vue-next'
 import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
 import { getUrlId } from '@renderer/utils/getUrlId.ts'
 import { ref } from 'vue'
+import { onMounted } from 'vue'
+import { invoke, ipc } from '@renderer/utils/ipc.ts'
+import { httpUrlValidator } from '@renderer/utils/httpUrlValidator.ts'
 
 const parseStore = useParseStore()
 const {
@@ -86,6 +89,21 @@ const {
   GetFileListRes,
   vcode
 } = storeToRefs(parseStore)
+
+onMounted(() => {
+  ipc.on('clipboard.change', async (_, data) => {
+    const text = data.currentClipboardContent
+    if (!text) return
+    if (
+      httpUrlValidator(text) === true &&
+      (text.includes('pan.baidu.com') || text.includes('yun.baidu.com'))
+    ) {
+      await invoke('window.alert')
+      GetFileListReq.value.url = text
+      parseUrl()
+    }
+  })
+})
 
 const parseUrl = () => {
   const res = getUrlId(GetFileListReq.value.url)
@@ -107,7 +125,7 @@ const clearDir = () => {
 }
 
 const formRules: FormProps['rules'] = {
-  url: [{ required: true, message: '链接不能为空' }],
+  url: [{ required: true, message: '链接不能为空' }, { validator: httpUrlValidator }],
   parse_password: [{ required: true, message: '解析密码不能为空' }],
   vcode_input: [{ required: true, message: '验证码不能为空' }]
 }

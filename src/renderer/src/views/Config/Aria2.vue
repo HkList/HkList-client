@@ -2,10 +2,7 @@
   <t-card>
     <t-form :data="config.aria2" :rules="formRules" @submit="submitForm" :labelWidth="120">
       <t-form-item name="dir" label="下载位置" @change="triggerChange">
-        <div class="input">
-          <t-input v-model="config.aria2.dir" />
-          <t-button @click="showSelectDir">选择</t-button>
-        </div>
+        <SelectDir v-model="config.aria2.dir" />
       </t-form-item>
 
       <t-form-item name="rpc-listen-port" label="RPC端口" @change="triggerChange">
@@ -46,11 +43,12 @@
 
 <script lang="ts" setup>
 import { useConfigStore } from '@renderer/stores/config.ts'
-import { invoke } from '@renderer/utils/invoke.ts'
+import { invoke } from '@renderer/utils/ipc.ts'
 import { useSaveFirst } from '@renderer/utils/use/useSaveFirst.ts'
 import { storeToRefs } from 'pinia'
 import type { FormProps } from 'tdesign-vue-next'
 import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
+import SelectDir from '@renderer/components/SelectDir.vue'
 
 const configStore = useConfigStore()
 const { config } = storeToRefs(configStore)
@@ -75,25 +73,10 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
   restart()
 }
 
-const showSelectDir = async () => {
-  const result = await invoke('window.selectFoloder')
-  if (result.cancel) {
-    MessagePlugin.info('取消选择')
-    return
-  }
-  config.value.aria2.dir = result.folder
-}
-
 const restart = async () => {
   await invoke('aria2.restart')
   MessagePlugin.success('重启Aria2成功')
 }
 </script>
 
-<style lang="scss" scoped>
-.input {
-  display: flex;
-  gap: 20px;
-  width: 100%;
-}
-</style>
+<style lang="scss" scoped></style>

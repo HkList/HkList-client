@@ -1,11 +1,14 @@
 <template>
   <SetLimit v-model="isShowingLimitDialog" />
+  <AddTask v-model="isShowingAddDialog" />
 
-  <t-card class="fixed">
+  <t-card class="flex">
     <t-space>
-      <span>下载速度: {{ formatBytes(download) }}/s</span>
       <t-button @click="showLimitDialog">设置限速</t-button>
+      <t-button @click="showAddTask">添加任务</t-button>
     </t-space>
+
+    <span>下载速度: {{ formatBytes(download) }}/s</span>
   </t-card>
 </template>
 
@@ -15,6 +18,7 @@ import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { formatBytes } from '@renderer/utils/format.ts'
 import SetLimit from '@renderer/views/Task/StatusBar/SetLimit.vue'
+import AddTask from '@renderer/views/Task/AddTask/index.vue'
 
 const taskStore = useTaskStore()
 const { active } = storeToRefs(taskStore)
@@ -24,24 +28,28 @@ const download = computed(() =>
 )
 
 const isShowingLimitDialog = ref(false)
+const isShowingAddDialog = ref(false)
 
 const showLimitDialog = () => {
   isShowingLimitDialog.value = true
 }
+
+const showAddTask = () => {
+  isShowingAddDialog.value = true
+}
 </script>
 
 <style lang="scss">
-.fixed {
-  position: absolute;
-  bottom: -75px;
-  right: 0;
+.t-card__body {
+  padding: 15px !important;
 
-  .t-card__body {
-    padding: 15px !important;
-
-    span {
-      line-height: 30px;
-    }
+  span {
+    line-height: 30px;
   }
+}
+
+.flex .t-card__body {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

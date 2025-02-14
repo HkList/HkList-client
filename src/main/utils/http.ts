@@ -1,4 +1,5 @@
 // @ts-ignore
+import { version } from '@/package.json'
 import run from '@main/utils/fingerprint.js'
 import type { AxiosInstance, AxiosRequestConfig, CustomParamsSerializer, Method } from 'axios'
 import axios from 'axios'
@@ -7,11 +8,12 @@ import { stringify } from 'qs'
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
 const defaultConfig: AxiosRequestConfig = {
   // 请求超时时间
-  timeout: 10000,
+  timeout: 114514000,
   baseURL: '',
   headers: {
     Accept: 'application/json, text/plain, */*',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'User-Agent': `hklist-client/${version}`
   },
   // 数组格式参数序列化（https://github.com/axios/axios/issues/5142）
   paramsSerializer: {

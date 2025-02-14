@@ -12,7 +12,7 @@ export interface SelectedFolder {
   folder: string
 }
 
-export default defineLoader((ipc, windows) => {
+export default defineLoader((ipc, _emitter, windows) => {
   ipc.handle('window.minimize', () => {
     windows?.main?.minimize()
     return success()
@@ -50,5 +50,14 @@ export default defineLoader((ipc, windows) => {
       cancel: result.canceled,
       folder: result.filePaths[0]
     })
+  })
+
+  ipc.handle('window.alert', () => {
+    if (!windows.main) return success()
+
+    if (!windows.main.isMinimized()) windows.main.minimize()
+    windows.main.show()
+
+    return success()
   })
 })

@@ -1,6 +1,6 @@
 import type { Config } from '@/src/main/ipc/config.ts'
 import { MB } from '@renderer/utils/format.ts'
-import { invoke } from '@renderer/utils/invoke.ts'
+import { invoke } from '@renderer/utils/ipc.ts'
 import { useDark } from '@renderer/utils/use/useDark.ts'
 import { defineStore } from 'pinia'
 import { ref, toRaw } from 'vue'

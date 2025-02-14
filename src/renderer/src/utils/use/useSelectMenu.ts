@@ -7,6 +7,8 @@ export const useSelectMenu = (): [Ref<string, string>, MenuProps['onChange']] =>
   const router = useRouter()
   const selectedMenu = ref(router.currentRoute.value.path)
 
+  router.afterEach((to) => (selectedMenu.value = to.path))
+
   const changeMenu: MenuProps['onChange'] = async (value) => {
     value = value.toString()
 

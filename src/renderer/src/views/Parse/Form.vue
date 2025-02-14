@@ -78,6 +78,7 @@ import { ref } from 'vue'
 import { onMounted } from 'vue'
 import { invoke, ipc } from '@renderer/utils/ipc.ts'
 import { httpUrlValidator } from '@renderer/utils/httpUrlValidator.ts'
+import { useRouter } from 'vue-router'
 
 const parseStore = useParseStore()
 const {
@@ -90,12 +91,15 @@ const {
   vcode
 } = storeToRefs(parseStore)
 
+const router = useRouter()
+
 onMounted(() => {
   ipc.on('clipboard.change', async (_, data) => {
     const text = data.currentClipboardContent
     if (!text) return
     if (text.includes('pan.baidu.com') || text.includes('yun.baidu.com')) {
       await invoke('window.alert')
+      router.push('/parse')
       GetFileListReq.value.url = text
       parseUrl()
     }

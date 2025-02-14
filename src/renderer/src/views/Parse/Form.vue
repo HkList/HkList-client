@@ -94,10 +94,7 @@ onMounted(() => {
   ipc.on('clipboard.change', async (_, data) => {
     const text = data.currentClipboardContent
     if (!text) return
-    if (
-      httpUrlValidator(text) === true &&
-      (text.includes('pan.baidu.com') || text.includes('yun.baidu.com'))
-    ) {
+    if (text.includes('pan.baidu.com') || text.includes('yun.baidu.com')) {
       await invoke('window.alert')
       GetFileListReq.value.url = text
       parseUrl()

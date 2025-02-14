@@ -2,8 +2,8 @@
   <div class="container">
     <StatusBar />
 
-    <t-card class="tasks">
-      <t-tabs :value="selected" placement="left" @change="handlerChange" theme="card" class="tabs">
+    <t-card class="task__tasks">
+      <t-tabs :value="selected" placement="left" @change="handlerChange" theme="card">
         <t-tab-panel value="all">
           <template #label>
             <ListIcon style="margin-left: 3px" />
@@ -20,10 +20,8 @@
         </t-tab-panel>
         <t-tab-panel value="waiting">
           <template #label>
-            <div class="tab-item">
-              <PauseIcon size="20px" />
-              <span>正在等待</span>
-            </div>
+            <PauseIcon size="20px" />
+            <span>正在等待</span>
           </template>
           <TaskList :tasks="waiting" />
         </t-tab-panel>
@@ -86,27 +84,28 @@ onDeactivated(() => {
 })
 </script>
 
-<style lang="scss">
-.tasks {
-  .t-card__body {
-    padding: 0 !important;
-  }
-}
-
-.tabs {
-  border-radius: 6px;
-  min-height: 580px;
-
-  .t-tabs__nav-item-text-wrapper {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-  }
-}
-
+<style lang="scss" scoped>
 .container {
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+</style>
+
+<style lang="scss">
+.task__tasks {
+  .t-card__body {
+    padding: 0 !important;
+
+    .t-tabs {
+      border-radius: 6px;
+      min-height: 580px;
+
+      .t-tabs__nav-item-text-wrapper {
+        display: flex;
+        gap: 5px;
+      }
+    }
+  }
 }
 </style>

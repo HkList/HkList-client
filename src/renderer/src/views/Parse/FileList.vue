@@ -2,6 +2,7 @@
   <t-card v-if="GetFileListRes">
     <t-table
       row-key="fs_id"
+      class="parse__file-list"
       resizable
       lazy-load
       :bordered="true"
@@ -99,15 +100,17 @@ const getDir = async (event: PointerEvent, path: string) => {
 </script>
 
 <style lang="scss">
-.ico {
-  width: 30px;
-  height: 30px;
-  margin-right: 15px;
-  background-size: contain;
-}
+.parse__file-list {
+  .ico {
+    width: 30px;
+    height: 30px;
+    margin-right: 15px;
+    background-size: contain;
+  }
 
-.filename {
-  display: flex;
-  align-items: center;
+  .filename {
+    display: flex;
+    align-items: center;
+  }
 }
 </style>

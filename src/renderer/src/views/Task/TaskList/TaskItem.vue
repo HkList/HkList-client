@@ -1,6 +1,6 @@
 <template>
   <t-list-item>
-    <div class="flex">
+    <div class="task__taskList__info">
       <img :src="getFileIcon(filename)" class="image" />
       <t-space direction="vertical" class="gap">
         <p>{{ filename }}</p>
@@ -17,7 +17,7 @@
     </div>
 
     <template #action>
-      <t-space class="gap-action">
+      <div class="gap-action">
         <t-link theme="primary" v-if="task.status === 'active'" @click="pauseTask"> 暂停 </t-link>
         <t-link theme="primary" v-if="task.status === 'paused'" @click="unpauseTask"> 开始 </t-link>
 
@@ -35,7 +35,7 @@
         </t-popconfirm>
 
         <t-link theme="primary" @click="openTaskFolder"> 打开文件位置 </t-link>
-      </t-space>
+      </div>
     </template>
   </t-list-item>
 </template>
@@ -84,17 +84,13 @@ const openTaskFolder = async () => {
 </script>
 
 <style lang="scss" scoped>
-.flex {
+.task__taskList__info {
   display: flex;
   width: 100%;
   justify-content: space-around;
   align-items: center;
   gap: 10px;
-}
-</style>
 
-<style lang="scss">
-.flex {
   .image {
     width: 50px;
   }
@@ -122,12 +118,9 @@ const openTaskFolder = async () => {
 
 .gap-action {
   min-width: 180px;
+  display: flex;
   gap: 5px !important;
   margin-left: 10px;
   justify-content: flex-end;
-
-  .t-space-item {
-    width: fit-content;
-  }
 }
 </style>

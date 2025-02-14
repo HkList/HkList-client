@@ -12,7 +12,7 @@
     @input-change="onInputChange"
   >
     <template #panel>
-      <ul class="hklist__select-input-ul-single" v-if="Aria2ClientInputOptionsKeys.length > 0">
+      <ul class="task__addTask__selectOptions" v-if="Aria2ClientInputOptionsKeys.length > 0">
         <li
           v-for="item in Aria2ClientInputOptionsKeys"
           :key="item"
@@ -78,29 +78,29 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.hklist__select-input-ul-single {
+.task__addTask__selectOptions {
   display: flex;
   flex-direction: column;
   max-height: 200px;
   overflow: auto;
-}
 
-.hklist__select-input-ul-single > li {
-  display: block;
-  border-radius: 3px;
-  line-height: 22px;
-  cursor: pointer;
-  padding: 3px 8px;
-  color: var(--td-text-color-primary);
-  transition: background-color 0.2s linear;
-  white-space: nowrap;
-  word-wrap: normal;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex-shrink: 0;
-}
+  > li {
+    display: block;
+    border-radius: 3px;
+    line-height: 22px;
+    cursor: pointer;
+    padding: 3px 8px;
+    color: var(--td-text-color-primary);
+    transition: background-color 0.2s linear;
+    white-space: nowrap;
+    word-wrap: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
 
-.hklist__select-input-ul-single > li:hover {
-  background-color: var(--td-bg-color-container-hover);
+    :hover {
+      background-color: var(--td-bg-color-container-hover);
+    }
+  }
 }
 </style>

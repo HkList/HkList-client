@@ -128,7 +128,7 @@ export default defineLoader(async (ipc) => {
 
   ipc.handle('aria2.addTask', async (_, params) => {
     await startAria2()
-    const gid = await aria2.addUri(client!, params.urls, params)
+    const gid = await Promise.all(params.urls.map((v) => aria2.addUri(client!, [v], params)))
     return success({ gid })
   })
 

@@ -62,21 +62,12 @@ body {
   align-items: center !important;
 }
 
-.t-tabs__content {
-  height: 100%;
-  overflow: auto !important;
-}
-
 .t-textarea__inner {
   height: 200px !important;
 }
 
 .t-message.t-is-closable .t-message__close {
   margin-left: 5px !important;
-}
-
-.container {
-  height: 100%;
 }
 
 .t-loading--center {

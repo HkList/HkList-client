@@ -36,7 +36,7 @@ const complete = ref(0)
 const timer = ref(0)
 
 function process() {
-  complete.value += Math.floor(Math.random() * 10)
+  complete.value += Math.floor(Math.random() * 1)
   if (complete.value >= 100) {
     complete.value = 100
     router.push('/')
@@ -52,12 +52,7 @@ onMounted(() => processInterval())
 onBeforeUnmount(() => clearTimeout(timer.value))
 </script>
 
-<style lang="scss">
-#app {
-  margin: 0;
-  padding: 0;
-}
-
+<style lang="scss" scoped>
 .page {
   display: flex;
   align-items: center;
@@ -74,21 +69,26 @@ onBeforeUnmount(() => clearTimeout(timer.value))
     .font-h1 {
       font-size: 120px;
     }
+
     .tip {
       font-size: 30px;
       padding-top: 20px;
     }
+
     .complete {
       font-size: 30px;
       padding: 30px 0;
     }
+
     .details {
       display: flex;
       align-items: center;
+
       .qr-image img {
         height: 120px;
         width: 120px;
       }
+
       .stopcode {
         padding-left: 15px;
         height: 120px;
@@ -104,23 +104,6 @@ onBeforeUnmount(() => clearTimeout(timer.value))
         }
       }
     }
-  }
-}
-
-@media screen and (max-width: 800px) {
-  .container {
-    width: 90vw !important;
-  }
-  .tip {
-    font-size: 20px !important;
-    padding-top: 20px;
-  }
-  .complete {
-    font-size: 20px !important;
-    padding: 30px 0;
-  }
-  .stopcode-text {
-    font-size: 15px !important;
   }
 }
 </style>

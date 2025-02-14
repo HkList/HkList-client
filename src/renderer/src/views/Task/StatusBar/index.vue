@@ -2,10 +2,10 @@
   <SetLimit v-model="isShowingLimitDialog" />
   <AddTask v-model="isShowingAddDialog" />
 
-  <t-card class="flex">
+  <t-card class="task__statusBar__card">
     <t-space>
-      <t-button @click="showLimitDialog">设置限速</t-button>
       <t-button @click="showAddTask">添加任务</t-button>
+      <t-button @click="showLimitDialog">设置限速</t-button>
     </t-space>
 
     <span>下载速度: {{ formatBytes(download) }}/s</span>
@@ -40,16 +40,15 @@ const showAddTask = () => {
 </script>
 
 <style lang="scss">
-.t-card__body {
-  padding: 15px !important;
+.task__statusBar__card {
+  .t-card__body {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px !important;
+  }
 
   span {
     line-height: 30px;
   }
-}
-
-.flex .t-card__body {
-  display: flex;
-  justify-content: space-between;
 }
 </style>

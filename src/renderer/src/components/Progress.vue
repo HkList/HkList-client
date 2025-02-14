@@ -10,12 +10,14 @@
 </template>
 
 <script lang="ts" setup>
-const {
-  progress = 0,
-  active = true,
-  width = 200,
-  height = 20
-} = defineProps<{ progress: number; active: boolean; width?: number; height?: number }>()
+type Props = {
+  progress: number
+  active: boolean
+  width?: number
+  height?: number
+}
+
+const { progress = 0, active = true, width = 200, height = 20 } = defineProps<Props>()
 </script>
 
 <style lang="scss" scoped>
@@ -30,7 +32,7 @@ const {
     background-color: #208fe5;
     background-size: 20px 20px;
 
-    &.active {
+    .active {
       background-image: linear-gradient(
         45deg,
         rgba(255, 255, 255, 0.15) 25%,

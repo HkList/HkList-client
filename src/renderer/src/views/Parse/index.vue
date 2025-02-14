@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <h1 v-if="config.parse.server === ''">请先前往配置管理设置解析服务器哦~</h1>
     <template v-else>
       <div class="flex" v-if="ready">

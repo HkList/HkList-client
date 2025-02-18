@@ -30,11 +30,11 @@ const download = computed(() =>
 const isShowingLimitDialog = ref(false)
 const isShowingAddDialog = ref(false)
 
-const showLimitDialog = () => {
+const showLimitDialog = (): void => {
   isShowingLimitDialog.value = true
 }
 
-const showAddTask = () => {
+const showAddTask = (): void => {
   isShowingAddDialog.value = true
 }
 </script>

@@ -1,4 +1,4 @@
-export const getUrlId = (url: string) => {
+export const getUrlId = (url: string): { surl: string; pwd: string; url: string } | false => {
   if (!url) return false
 
   const urlMatch = url.match(/s\/([a-zA-Z0-9_-]+)/)

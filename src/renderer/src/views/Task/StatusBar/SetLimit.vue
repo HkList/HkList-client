@@ -3,9 +3,9 @@
     <t-form :data="setLimit" :rules="formRules" @submit="submitForm">
       <t-form-item label="下载速度" name="max-overall-download-limit" help="0为不限速">
         <t-input-number
-          :min="0"
           v-model="setLimit['max-overall-download-limit']"
-          :autoWidth="true"
+          :min="0"
+          :auto-width="true"
         />
         <span style="margin-left: 10px">MB/s</span>
       </t-form-item>
@@ -27,9 +27,9 @@ import type { FormProps } from 'tdesign-vue-next'
 import type { Aria2ClientGlobalOptions } from '@huan_kong/maria2'
 import { MB } from '@renderer/utils/format.ts'
 
-const showDialog = defineModel()
+const showDialog = defineModel<boolean>()
 
-const closeDialog = () => (showDialog.value = false)
+const closeDialog = (): boolean => (showDialog.value = false)
 
 const setLimit = ref<Aria2ClientGlobalOptions>({
   'max-overall-download-limit': 0
@@ -51,7 +51,7 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
   closeDialog()
 }
 
-const getGlobalOptions = async () => {
+const getGlobalOptions = async (): Promise<void> => {
   const options = await invoke('aria2.getGlobalOption')
   options['max-overall-download-limit'] = (options['max-overall-download-limit'] ?? 0) / MB
   setLimit.value = options

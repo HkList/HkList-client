@@ -1,8 +1,8 @@
 <template>
   <t-dialog v-model:visible="showAddTask" header="添加任务" :footer="false" width="80%">
-    <t-form :data="addTask" :rules="formRules" @submit="submitForm" :labelWidth="130">
+    <t-form :data="addTask" :rules="formRules" :label-width="130" @submit="submitForm">
       <t-form-item label="下载链接" name="urls">
-        <t-textarea placeholder="支持HTTP链接" v-model="urls" @blur="parseUrls" />
+        <t-textarea v-model="urls" placeholder="支持HTTP链接" @blur="parseUrls" />
       </t-form-item>
 
       <t-form-item label="保存位置" name="dir">
@@ -10,7 +10,7 @@
       </t-form-item>
 
       <t-form-item label="线程数" name="split">
-        <t-input-number :min="1" v-model="addTask.split" />
+        <t-input-number v-model="addTask.split" :min="1" />
       </t-form-item>
 
       <t-form-item>
@@ -44,9 +44,9 @@ import SelectDir from '@renderer/components/SelectDir.vue'
 const configStore = useConfigStore()
 const { config } = storeToRefs(configStore)
 
-const showAddTask = defineModel()
+const showAddTask = defineModel<boolean>()
 
-const closeDialog = () => (showAddTask.value = false)
+const closeDialog = (): boolean => (showAddTask.value = false)
 
 watch(showAddTask, () => {
   // 初始化参数
@@ -85,7 +85,7 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
 }
 
 const urls = ref('')
-const parseUrls = () => (addTask.value.urls = urls.value.split('\n').filter(Boolean))
+const parseUrls = (): string[] => (addTask.value.urls = urls.value.split('\n').filter(Boolean))
 
 const Aria2ClientInputOptions = ref<{ key: Aria2ClientInputOptionKey; value: string }[]>([
   { key: 'user-agent', value: 'netdisk' },
@@ -99,7 +99,8 @@ const Aria2ClientInputOptionsShow = computed(() => [
 
 const selectedValue = computed(() => Aria2ClientInputOptions.value.map((v) => v.key))
 
-const onDelete = (rowIndex: number) => Aria2ClientInputOptions.value.splice(rowIndex, 1)
+const onDelete = (rowIndex: number): { key: Aria2ClientInputOptionKey; value: string }[] =>
+  Aria2ClientInputOptions.value.splice(rowIndex, 1)
 
 const columns: TableProps['columns'] = [
   {
@@ -111,11 +112,11 @@ const columns: TableProps['columns'] = [
       props: { selectedValue: selectedValue.value },
       abortEditOnEvent: ['onEnter'],
       on: () => ({
-        onEnter: (ctx: { e: { preventDefault: () => void } }) => {
+        onEnter: (ctx: { e: { preventDefault: () => void } }): void => {
           ctx?.e?.preventDefault()
         }
       }),
-      onEdited: (context) => {
+      onEdited: (context): void => {
         const row = Aria2ClientInputOptions.value[context.rowIndex]
         if (row) {
           row.key = context.newRowData.key
@@ -134,11 +135,11 @@ const columns: TableProps['columns'] = [
       props: { autofocus: true },
       abortEditOnEvent: ['onEnter'],
       on: () => ({
-        onEnter: (ctx: { e: { preventDefault: () => void } }) => {
+        onEnter: (ctx: { e: { preventDefault: () => void } }): void => {
           ctx?.e?.preventDefault()
         }
       }),
-      onEdited: (context) => {
+      onEdited: (context): void => {
         const row = Aria2ClientInputOptions.value[context.rowIndex]
         if (!row) return
         row.value = context.newRowData.value

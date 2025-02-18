@@ -1,9 +1,9 @@
 <template>
   <t-list split class="list">
-    <div class="empty" v-if="tasks.length === 0">
+    <div v-if="tasks.length === 0" class="empty">
       <t-empty />
     </div>
-    <TaskItem v-else v-for="task in tasks" :task="task" />
+    <TaskItem v-for="task in tasks" v-else :key="task.gid" :task="task" />
   </t-list>
 </template>
 

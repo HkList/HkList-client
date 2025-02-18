@@ -1,5 +1,5 @@
 export interface BaseResponse<T = void> {
-  success: Boolean
+  success: boolean
   message: string
   data: T
 }

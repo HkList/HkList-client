@@ -1,6 +1,5 @@
 import type { IpcEvents, IpcRendererEvent } from '@main/ipc/type.ts'
 import type { Windows } from '@main/loader.ts'
-import { app } from 'electron'
 
 import { IpcEmitter, IpcListener } from '@electron-toolkit/typed-ipc/main'
 import createWindow from '@main/function/createWindow.ts'
@@ -12,24 +11,15 @@ import clipboard from '@main/ipc/clipboard.ts'
 import config from '@main/ipc/config.ts'
 import parse from '@main/ipc/parse.ts'
 import window from '@main/ipc/window.ts'
-import { handleError } from '@main/utils/handleError.ts'
+import { rewriteIpcHandle } from '@main/utils/rewriteIpcHandle.ts'
+import { app } from 'electron'
 
 app.whenReady().then(async () => {
   const windows: Windows = {}
   const ipc = new IpcListener<IpcEvents>()
   const emitter = new IpcEmitter<IpcRendererEvent>()
 
-  ipc.handle = ((originFunction) => {
-    originFunction = originFunction.bind(ipc)
-    return (name, fn) =>
-      originFunction(name, async (e, ...args) => {
-        try {
-          return await fn(e, ...args)
-        } catch (error) {
-          return handleError(error) as any
-        }
-      })
-  })(ipc.handle)
+  rewriteIpcHandle(ipc)
 
   await setAppUserModelId(ipc, emitter, windows)
   await preventF12(ipc, emitter, windows)

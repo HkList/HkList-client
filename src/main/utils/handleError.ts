@@ -1,4 +1,4 @@
-import { failure } from '@main/utils/response.ts'
+import { failure, type FailureResponse } from '@main/utils/response.ts'
 import { AxiosError } from 'axios'
 
 export interface Aria2Error {
@@ -7,17 +7,10 @@ export interface Aria2Error {
 }
 
 export function checkIsAria2Error(error: unknown): error is Aria2Error {
-  return (
-    typeof error === 'object' &&
-    error !== null &&
-    'code' in error &&
-    'message' in error &&
-    typeof (error as any).code === 'number' &&
-    typeof (error as any).message === 'string'
-  )
+  return typeof error === 'object' && error !== null && 'code' in error && 'message' in error
 }
 
-export function handleError(error: unknown) {
+export function handleError(error: unknown): FailureResponse<null> {
   console.error('未被捕获的错误:', error)
 
   if (error instanceof AxiosError) {

@@ -3,7 +3,7 @@
     <StatusBar />
 
     <t-card class="task__tasks">
-      <t-tabs :value="selected" placement="left" @change="handlerChange" theme="card">
+      <t-tabs :value="selected" placement="left" theme="card" @change="handlerChange">
         <t-tab-panel value="all">
           <template #label>
             <ListIcon style="margin-left: 3px" />
@@ -56,7 +56,7 @@ const handlerChange: TabsProps['onChange'] = (value) => {
 const taskStore = useTaskStore()
 const { active, stopped, waiting } = storeToRefs(taskStore)
 
-const getTask = async () => {
+const getTask = async (): Promise<boolean> => {
   try {
     await Promise.all([taskStore.getAcitve(), taskStore.getStopped(), taskStore.getWaiting()])
     return true
@@ -67,7 +67,7 @@ const getTask = async () => {
 }
 
 const componentActive = ref(false)
-const startTaskPolling = async () => {
+const startTaskPolling = async (): Promise<void> => {
   const success = await getTask()
   const nextDelay = success ? 500 : 5000
   if (!componentActive.value) return

@@ -1,3 +1,5 @@
+<!-- eslint-disable vue/no-v-html -->
+
 <template>
   <t-card v-if="GetConfigRes.show_announce" title="公告">
     <div v-html="GetConfigRes.announce"></div>

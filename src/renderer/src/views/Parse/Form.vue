@@ -20,9 +20,9 @@
     <t-form
       :data="GetFileListReq"
       :rules="formRules"
-      :labelWidth="120"
-      @submit="submitForm"
+      :label-width="120"
       class="form"
+      @submit="submitForm"
     >
       <t-form-item name="url" label="链接">
         <t-input v-model.trim="GetFileListReq.url" @blur="parseUrl" @change="clearDir" />
@@ -36,7 +36,7 @@
         <t-input v-model.trim="GetFileListReq.pwd" @change="clearDir" />
       </t-form-item>
 
-      <t-form-item name="parse_password" label="解析密码" v-if="GetConfigRes.need_password">
+      <t-form-item v-if="GetConfigRes.need_password" name="parse_password" label="解析密码">
         <t-input v-model.trim="GetFileListReq.parse_password" />
       </t-form-item>
 
@@ -106,7 +106,7 @@ onMounted(() => {
   })
 })
 
-const parseUrl = () => {
+const parseUrl = (): void => {
   const res = getUrlId(GetFileListReq.value.url)
   if (!res) return
 
@@ -120,7 +120,7 @@ const parseUrl = () => {
   }
 }
 
-const clearDir = () => {
+const clearDir = (): void => {
   GetFileListReq.value.dir = '/'
   GetFileListRes.value = undefined
 }
@@ -140,7 +140,7 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
 
 const timestamp = ref(Date.now())
 
-const changeTimestamp = () => {
+const changeTimestamp = (): void => {
   timestamp.value = Date.now()
 }
 </script>

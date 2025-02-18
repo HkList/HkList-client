@@ -1,6 +1,6 @@
 import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
 
-export const copy = async (text: string, message = '复制成功') => {
+export const copy = async (text: string, message = '复制成功'): Promise<void> => {
   try {
     await navigator.clipboard.writeText(text)
   } catch {

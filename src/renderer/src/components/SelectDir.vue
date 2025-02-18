@@ -8,9 +8,9 @@
 <script lang="ts" setup>
 import { invoke } from '@renderer/utils/ipc.ts'
 
-const model = defineModel()
+const model = defineModel<string>()
 
-const showSelectDir = async () => {
+const showSelectDir = async (): Promise<void> => {
   const result = await invoke('window.selectFoloder')
   if (result.cancel) return
   model.value = result.folder

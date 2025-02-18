@@ -35,7 +35,7 @@ export const useParseStore = defineStore('parse', () => {
     need_password: false,
     have_account: false
   })
-  const getConfig = async () => {
+  const getConfig = async (): Promise<void> => {
     const res = await invoke('parse.getConfig')
     GetConfigRes.value = res
   }
@@ -50,7 +50,7 @@ export const useParseStore = defineStore('parse', () => {
   })
   const GetLimitError = ref('')
 
-  const getLimit = async () => {
+  const getLimit = async (): Promise<void> => {
     try {
       const res = await invoke('parse.getLimit', GetLimitReq.value)
       GetLimitRes.value = res
@@ -73,14 +73,14 @@ export const useParseStore = defineStore('parse', () => {
   const GetFileListRes = ref<GetFileListRes>()
 
   // 根据路径生成上一个路径的地址
-  const getPreviousPath = () => {
+  const getPreviousPath = (): string => {
     const newArr = GetFileListReq.value.dir.split('/')
     newArr.pop()
     const newPath = newArr.join('/')
     return newPath === '' ? '/' : newPath
   }
 
-  const getFileList = async (sample = false) => {
+  const getFileList = async (sample = false): Promise<void> => {
     const req: GetFileListReq = sample
       ? {
           url: 'https://pan.baidu.com/s/1H5PkdA_zMfkOQ7U4maakGA?pwd=ymuk',
@@ -127,7 +127,10 @@ export const useParseStore = defineStore('parse', () => {
 
   const pending = ref(false)
   const GetDownLoadLinksRes = ref<GetDownLoadLinksRes>([])
-  const getDownloadLinks = async (event?: PointerEvent | number, row?: File) => {
+  const getDownloadLinks = async (
+    event?: PointerEvent | number,
+    row?: File
+  ): Promise<boolean | GetDownLoadLinksRes | undefined> => {
     if (pending.value) {
       MessagePlugin.error('正在解析中,请稍后再试')
       return false

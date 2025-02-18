@@ -12,7 +12,7 @@ const width = 1250
 const height = 800
 
 export default defineLoader<BrowserWindow>(() => {
-  let mainWindowState = WindowStateKeeper({
+  const mainWindowState = WindowStateKeeper({
     defaultWidth: width,
     defaultHeight: height,
     path: configPath

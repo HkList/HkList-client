@@ -35,7 +35,7 @@ const router = useRouter()
 const complete = ref(0)
 const timer = ref(0)
 
-function process() {
+function process(): void {
   complete.value += Math.floor(Math.random() * 1)
   if (complete.value >= 100) {
     complete.value = 100
@@ -45,7 +45,8 @@ function process() {
   }
 }
 
-const processInterval = () => (timer.value = window.setTimeout(process, Math.random() * 500))
+const processInterval = (): number =>
+  (timer.value = window.setTimeout(process, Math.random() * 500))
 
 onMounted(() => processInterval())
 

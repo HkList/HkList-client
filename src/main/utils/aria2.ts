@@ -1,6 +1,6 @@
 import type { Aria2ClientInputOptionKey, Aria2DownloadStatus } from '@huan_kong/maria2'
 
-export const getTaskName = (task: Aria2DownloadStatus) => {
+export const getTaskName = (task: Aria2DownloadStatus): string => {
   let path = task?.files?.[0]?.path
   if (path === '') path = task?.files?.[0]?.uris?.[0]?.uri ?? '未知'
   const index = path.lastIndexOf('/')
@@ -11,14 +11,14 @@ export const getTaskName = (task: Aria2DownloadStatus) => {
   return decodeURIComponent(fileName)
 }
 
-export const calcProgress = (task: Aria2DownloadStatus) => {
+export const calcProgress = (task: Aria2DownloadStatus): string => {
   const { completedLength, totalLength } = task
   return completedLength === '0' && totalLength === '0'
     ? '0'
     : ((parseFloat(completedLength) / parseFloat(totalLength)) * 100).toFixed(2)
 }
 
-export const matchStatus = (status: Aria2DownloadStatus['status']) => {
+export const matchStatus = (status: Aria2DownloadStatus['status']): string => {
   switch (status) {
     case 'active':
       return '下载中'

@@ -12,4 +12,4 @@ export type Loader<T> = (
   windows: Windows
 ) => Promise<T> | T
 
-export const defineLoader = <T = void>(loader: Loader<T>) => loader
+export const defineLoader = <T = void>(loader: Loader<T>): Loader<T> => loader

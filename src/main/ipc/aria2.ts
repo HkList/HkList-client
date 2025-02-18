@@ -25,19 +25,20 @@ export const aria2Session = join(aria2Path, 'aria2.session')
 let proc: ChildProcessWithoutNullStreams | null = null
 let client: Conn | null = null
 
-export const startAria2 = (): Promise<ChildProcessWithoutNullStreams> => {
-  return new Promise(async (resolve, reject) => {
-    if (proc) {
-      resolve(proc)
-      return
-    }
+export const startAria2 = async (): Promise<ChildProcessWithoutNullStreams> => {
+  if (proc) return Promise.resolve(proc)
 
-    const res = await isPortReachable(nowConfig.aria2['rpc-listen-port'], { host: 'localhost' })
-    if (res) {
-      reject(new Error(`aria2 启动失败: 端口 ${nowConfig.aria2['rpc-listen-port']} 已被占用`))
-      return
-    }
+  const portIsReachable = await isPortReachable(nowConfig.aria2['rpc-listen-port'], {
+    host: 'localhost'
+  })
 
+  if (portIsReachable) {
+    return Promise.reject(
+      new Error(`aria2 启动失败: 端口 ${nowConfig.aria2['rpc-listen-port']} 已被占用`)
+    )
+  }
+
+  return new Promise((resolve, reject) => {
     const args = [`--conf-path=${aria2Config}`, `--save-session=${aria2Session}`]
     if (existsSync(aria2Session)) args.push(`--input-file=${aria2Session}`)
     for (const key in nowConfig.aria2) args.push(`--${key}=${nowConfig.aria2[key]}`)
@@ -73,7 +74,7 @@ export const startAria2 = (): Promise<ChildProcessWithoutNullStreams> => {
   })
 }
 
-export const stopAria2 = async () => {
+export const stopAria2 = async (): Promise<void> => {
   if (client) await aria2.shutdown(client)
   if (proc) proc.kill()
   proc = null
@@ -102,7 +103,9 @@ export interface OpenTaskFolder {
 export default defineLoader(async (ipc) => {
   try {
     await startAria2()
-  } catch (error) {}
+  } catch (_) {
+    // ignore
+  }
 
   ipc.handle('aria2.start', async () => {
     await startAria2()
@@ -171,7 +174,7 @@ export default defineLoader(async (ipc) => {
 
     await Promise.all(
       tasks.map(async (task) => {
-        return await (async () => {
+        return await (async (): Promise<void> => {
           if (task.status === 'complete') {
             await aria2.removeDownloadResult(client!, task.gid)
             return

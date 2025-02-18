@@ -55,7 +55,8 @@ const isMaximized = ref<IsMaximized>({
   isMaximized: false
 })
 
-const sizeChange = async () => (isMaximized.value = await invoke('window.getIsMaximized'))
+const sizeChange = async (): Promise<IsMaximized> =>
+  (isMaximized.value = await invoke('window.getIsMaximized'))
 
 onMounted(async () => {
   sizeChange()
@@ -66,12 +67,12 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', sizeChange)
 })
 
-const minimize = () => invoke('window.minimize')
-const maximize = () => invoke('window.maximize')
-const unMaximize = () => invoke('window.unMaximize')
-const close = () => invoke('window.close')
+const minimize = (): Promise<null> => invoke('window.minimize')
+const maximize = (): Promise<null> => invoke('window.maximize')
+const unMaximize = (): Promise<null> => invoke('window.unMaximize')
+const close = (): Promise<null> => invoke('window.close')
 
-const switchMaximize = async () => {
+const switchMaximize = async (): Promise<void> => {
   await (isMaximized.value.isMaximized ? unMaximize() : maximize())
   sizeChange()
 }

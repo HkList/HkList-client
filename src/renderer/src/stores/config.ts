@@ -25,14 +25,14 @@ export const useConfigStore = defineStore('config', () => {
     }
   })
 
-  const getConfig = async () => {
+  const getConfig = async (): Promise<void> => {
     config.value = await invoke('config.get')
     config.value.aria2['max-overall-download-limit'] =
       config.value.aria2['max-overall-download-limit'] / MB
     useDark()
   }
 
-  const saveConfig = async () => {
+  const saveConfig = async (): Promise<void> => {
     const tempConfig = toRaw(config.value)
     tempConfig.aria2['max-overall-download-limit'] =
       tempConfig.aria2['max-overall-download-limit'] * MB

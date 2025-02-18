@@ -7,10 +7,10 @@
       lazy-load
       :bordered="true"
       :data="GetFileListRes.list"
-      :maxHeight="500"
+      :max-height="500"
       :columns="columns"
       :select-on-row-click="true"
-      :selectedRowKeys="selectedRowKeys"
+      :selected-row-keys="selectedRowKeys"
       @select-change="parseStore.handleSelectChange"
     />
   </t-card>
@@ -38,7 +38,7 @@ const columns = ref<TableProps['columns']>([
   {
     colKey: 'server_filename',
     title: '文件名',
-    cell: (_, { row }) => (
+    cell: (_, { row }): string => (
       <>
         <div class="filename">
           <div
@@ -56,19 +56,19 @@ const columns = ref<TableProps['columns']>([
   {
     colKey: 'server_mtime',
     title: '修改时间',
-    cell: (_, { row }) => <>{formatTimestamp(row.server_mtime)}</>,
+    cell: (_, { row }): string => <>{formatTimestamp(row.server_mtime)}</>,
     ellipsis: true
   },
   {
     colKey: 'size',
     title: '文件大小',
-    cell: (_, { row }) => <>{formatBytes(row.size)}</>,
+    cell: (_, { row }): string => <>{formatBytes(row.size)}</>,
     ellipsis: true
   },
   {
     colKey: 'operation',
     title: '操作',
-    cell: (_, { row }) =>
+    cell: (_, { row }): string =>
       row.is_dir ? (
         <>
           <t-button theme="primary" onClick={(event: PointerEvent) => getDir(event, row.path)}>
@@ -91,7 +91,7 @@ const columns = ref<TableProps['columns']>([
   }
 ])
 
-const getDir = async (event: PointerEvent, path: string) => {
+const getDir = async (event: PointerEvent, path: string): Promise<void> => {
   event.stopPropagation()
 
   GetFileListReq.value.dir = path

@@ -11,7 +11,7 @@
         :data="GetDownLoadLinksRes"
         :columns="columns"
         :select-on-row-click="true"
-        :selectedRowKeys="selectedRowKeys"
+        :selected-row-keys="selectedRowKeys"
         @select-change="handleSelectChange"
         @page-change="handlePageChange"
       >
@@ -22,7 +22,7 @@
                 <t-space>
                   <t-tag size="large"> 第 {{ index + 1 }} 条 </t-tag>
                   <t-button @click="copy(url)">复制</t-button>
-                  <t-button @click="addAria2Url(row as GetDownLoadLinksRes[number])">
+                  <t-button @click="addAria2Url(row as GetDownLoadLinksResType[number])">
                     下载
                   </t-button>
                 </t-space>
@@ -45,7 +45,7 @@ import { type TableProps } from 'tdesign-vue-next'
 import { ref, watch } from 'vue'
 import { copy } from '@renderer/utils/copy.ts'
 import { LinkIcon } from 'tdesign-icons-vue-next'
-import type { GetDownLoadLinksRes } from '@main/ipc/parse.ts'
+import type { GetDownLoadLinksRes as GetDownLoadLinksResType } from '@main/ipc/parse.ts'
 import { invoke } from '@renderer/utils/ipc.ts'
 import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
 
@@ -70,7 +70,7 @@ const columns = ref<TableProps['columns']>([
   {
     colKey: 'ua',
     title: 'UA',
-    cell: (_, { row }) => (
+    cell: (_, { row }): string => (
       <t-link onClick={(event: PointerEvent) => copyLink(event, row.ua)}>
         <LinkIcon />
         {row.ua}
@@ -84,11 +84,11 @@ const columns = ref<TableProps['columns']>([
   {
     colKey: 'operation',
     title: '操作',
-    cell: (_, { row, rowIndex }) => (
+    cell: (_, { row, rowIndex }): string => (
       <>
         <t-button
           onClick={(event: PointerEvent) =>
-            reGetDownloadLinks(event, row as GetDownLoadLinksRes[number], rowIndex)
+            reGetDownloadLinks(event, row as GetDownLoadLinksResType[number], rowIndex)
           }
         >
           重新解析
@@ -100,19 +100,19 @@ const columns = ref<TableProps['columns']>([
 
 const reGetDownloadLinks = async (
   event: PointerEvent,
-  row: GetDownLoadLinksRes[number],
+  row: GetDownLoadLinksResType[number],
   rowIndex: number
-) => {
+): Promise<void> => {
   event.stopPropagation()
   const res = await parseStore.getDownloadLinks(row.fs_id)
   if (res) GetDownLoadLinksRes.value[rowIndex] = res[0]
 }
 
 const selectedRowKeys = ref<number[]>([])
-const selectedRows = ref<GetDownLoadLinksRes>([])
+const selectedRows = ref<GetDownLoadLinksResType>([])
 const handleSelectChange: TableProps['onSelectChange'] = (value, ctx) => {
   selectedRowKeys.value = value as number[]
-  selectedRows.value = (ctx.selectedRowData as GetDownLoadLinksRes).filter((row) => row.urls)
+  selectedRows.value = (ctx.selectedRowData as GetDownLoadLinksResType).filter((row) => row.urls)
 }
 
 watch(GetDownLoadLinksRes, () => {
@@ -120,17 +120,17 @@ watch(GetDownLoadLinksRes, () => {
   selectedRows.value = []
 })
 
-const handlePageChange = () => {
+const handlePageChange = (): void => {
   selectedRowKeys.value = []
   selectedRows.value = []
 }
 
-const copyLink = (event: PointerEvent, link: string) => {
+const copyLink = (event: PointerEvent, link: string): void => {
   event.stopPropagation()
   copy(link)
 }
 
-const addAria2Url = async (row: GetDownLoadLinksRes[number]) => {
+const addAria2Url = async (row: GetDownLoadLinksResType[number]): Promise<void> => {
   if (!row.urls) return
 
   await invoke('aria2.addTask', {
@@ -141,7 +141,7 @@ const addAria2Url = async (row: GetDownLoadLinksRes[number]) => {
   MessagePlugin.success(`文件${row.filename}已开始下载`)
 }
 
-const addAria2Urls = async () => {
+const addAria2Urls = (): void => {
   selectedRows.value.forEach(addAria2Url)
 }
 </script>

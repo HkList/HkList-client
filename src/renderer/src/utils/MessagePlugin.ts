@@ -7,7 +7,7 @@ import {
 export const MessagePlugin = new Proxy(
   {},
   {
-    get(_, key: string) {
+    get(_, key: string): MessagePluginType[keyof MessagePluginType] {
       if (['info', 'success', 'warning', 'error', 'question', 'loading'].includes(key)) {
         return (message: string | MessageInfoOptions, duration?: number) => {
           const params = typeof message === 'string' ? { content: message } : message

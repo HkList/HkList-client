@@ -2,9 +2,9 @@
   <t-select-input
     ref="selectInput"
     :value="selectValue"
-    :inputValue="inputValue"
-    :popupVisible="popupVisible"
-    :popupProps="{ overlayInnerStyle: { padding: '6px' } }"
+    :input-value="inputValue"
+    :popup-visible="popupVisible"
+    :popup-props="{ overlayInnerStyle: { padding: '6px' } }"
     style="width: 300px"
     placeholder="请选择配置项"
     allow-input
@@ -12,7 +12,7 @@
     @input-change="onInputChange"
   >
     <template #panel>
-      <ul class="task__addTask__selectOptions" v-if="Aria2ClientInputOptionsKeys.length > 0">
+      <ul v-if="Aria2ClientInputOptionsKeys.length > 0" class="task__addTask__selectOptions">
         <li
           v-for="item in Aria2ClientInputOptionsKeys"
           :key="item"
@@ -47,7 +47,7 @@ const selectValue = ref(props.value)
 const inputValue = ref('')
 const popupVisible = ref(false)
 
-const onOptionClick = (item: Aria2ClientInputOptionKey) => {
+const onOptionClick = (item: Aria2ClientInputOptionKey): void => {
   popupVisible.value = false
   inputValue.value = ''
   selectValue.value = item

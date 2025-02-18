@@ -2,13 +2,13 @@
   <div>
     <h1 v-if="config.parse.server === ''">请先前往配置管理设置解析服务器哦~</h1>
     <template v-else>
-      <div class="flex" v-if="ready">
+      <div v-if="ready" class="flex">
         <Announce />
         <Form />
         <FileList />
         <LinkList />
       </div>
-      <t-loading text="获取服务器数据中..." v-else />
+      <t-loading v-else text="获取服务器数据中..." />
     </template>
   </div>
 </template>
@@ -44,7 +44,9 @@ onActivated(async () => {
   try {
     await parseStore.getConfig()
     await parseStore.getLimit()
-  } catch (error) {}
+  } catch (_) {
+    // ignore
+  }
 
   ready.value = true
 })

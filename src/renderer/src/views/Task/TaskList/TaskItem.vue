@@ -18,18 +18,18 @@
 
     <template #action>
       <div class="gap-action">
-        <t-link theme="primary" v-if="task.status === 'active'" @click="pauseTask"> 暂停 </t-link>
-        <t-link theme="primary" v-if="task.status === 'paused'" @click="unpauseTask"> 开始 </t-link>
+        <t-link v-if="task.status === 'active'" theme="primary" @click="pauseTask"> 暂停 </t-link>
+        <t-link v-if="task.status === 'paused'" theme="primary" @click="unpauseTask"> 开始 </t-link>
 
-        <t-link theme="primary" @click="removeTaskDownloadResult" v-if="task.status === 'removed'">
+        <t-link v-if="task.status === 'removed'" theme="primary" @click="removeTaskDownloadResult">
           删除任务
         </t-link>
         <t-popconfirm
+          v-else
           theme="danger"
           content="是否要删除文件"
           @cancel="removeTask(false)"
           @confirm="removeTask(true)"
-          v-else
         >
           <t-link theme="primary"> 删除任务 </t-link>
         </t-popconfirm>
@@ -62,23 +62,23 @@ watch(
   }
 )
 
-const pauseTask = async () => {
+const pauseTask = async (): Promise<void> => {
   await invoke('aria2.pauseTask', { gids: [task.gid] })
 }
 
-const unpauseTask = async () => {
+const unpauseTask = async (): Promise<void> => {
   await invoke('aria2.unpauseTask', { gids: [task.gid] })
 }
 
-const removeTask = async (removeFile: boolean) => {
+const removeTask = async (removeFile: boolean): Promise<void> => {
   await invoke('aria2.removeTask', { gids: [task.gid], removeFile })
 }
 
-const removeTaskDownloadResult = async () => {
+const removeTaskDownloadResult = async (): Promise<void> => {
   await invoke('aria2.removeTaskResult', { gids: [task.gid] })
 }
 
-const openTaskFolder = async () => {
+const openTaskFolder = async (): Promise<void> => {
   await invoke('aria2.openTaskFolder', { gid: task.gid })
 }
 </script>

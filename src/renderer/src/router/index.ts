@@ -1,3 +1,4 @@
+import type { RouteComponent } from 'vue-router'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const router = createRouter({
@@ -6,23 +7,23 @@ const router = createRouter({
     {
       path: '/',
       redirect: '/parse',
-      component: () => import('@renderer/views/Home.vue'),
+      component: (): RouteComponent => import('@renderer/views/Home.vue'),
       children: [
         {
           path: '/parse',
-          component: () => import('@renderer/views/Parse/index.vue')
+          component: (): RouteComponent => import('@renderer/views/Parse/index.vue')
         },
         {
           path: '/account',
-          component: () => import('@renderer/views/Account/index.vue')
+          component: (): RouteComponent => import('@renderer/views/Account/index.vue')
         },
         {
           path: '/record',
-          component: () => import('@renderer/views/Record/index.vue')
+          component: (): RouteComponent => import('@renderer/views/Record/index.vue')
         },
         {
           path: '/task',
-          component: () => import('@renderer/views/Task/index.vue')
+          component: (): RouteComponent => import('@renderer/views/Task/index.vue')
         },
         {
           path: '/config',
@@ -30,15 +31,15 @@ const router = createRouter({
           children: [
             {
               path: '/config/general',
-              component: () => import('@renderer/views/Config/General.vue')
+              component: (): RouteComponent => import('@renderer/views/Config/General.vue')
             },
             {
               path: '/config/parse',
-              component: () => import('@renderer/views/Config/Parse.vue')
+              component: (): RouteComponent => import('@renderer/views/Config/Parse.vue')
             },
             {
               path: '/config/aria2',
-              component: () => import('@renderer/views/Config/Aria2.vue')
+              component: (): RouteComponent => import('@renderer/views/Config/Aria2.vue')
             }
           ]
         }
@@ -46,7 +47,7 @@ const router = createRouter({
     },
     {
       path: '/404',
-      component: () => import('@renderer/views/NotFound.vue')
+      component: (): RouteComponent => import('@renderer/views/NotFound.vue')
     },
     {
       path: '/:pathMatch(.*)',

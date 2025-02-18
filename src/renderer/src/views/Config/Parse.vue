@@ -59,7 +59,7 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
 const parseStore = useParseStore()
 const { GetLimitReq, GetLimitRes, GetFileListReq, GetLimitError } = storeToRefs(parseStore)
 
-const getConfig = async () => {
+const getConfig = async (): Promise<void> => {
   if (haveChanged.value) {
     MessagePlugin.warning('请先保存配置')
     return

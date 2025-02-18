@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router'
 export const useSaveFirst = (): [Ref<boolean, boolean>, () => boolean] => {
   const haveChanged = ref(false)
 
-  const triggerChange = () => (haveChanged.value = true)
+  const triggerChange = (): boolean => (haveChanged.value = true)
 
   const router = useRouter()
   const remove = router.beforeEach((_to, _from, next) => {

@@ -4,7 +4,7 @@ export const KB = 1024
 export const MB = 1024 * 1024
 export const GB = 1024 * 1024 * 1024
 
-export const formatBytes = (bytes: number | string, decimals = 2) => {
+export const formatBytes = (bytes: number | string, decimals = 2): string => {
   if (typeof bytes === 'string') bytes = parseFloat(bytes)
   if (bytes === 0) return '0 B'
   const k = 1024
@@ -13,10 +13,12 @@ export const formatBytes = (bytes: number | string, decimals = 2) => {
   return (bytes / Math.pow(k, i)).toFixed(decimals) + ' ' + sizes[i]
 }
 
-export const formatDateToString = (timeString: dayjs.ConfigType, format = 'YYYY/MM/DD HH:mm:ss') =>
-  dayjs(timeString).format(format)
+export const formatDateToString = (
+  timeString: dayjs.ConfigType,
+  format = 'YYYY/MM/DD HH:mm:ss'
+): string => dayjs(timeString).format(format)
 
-export const formatTimestamp = (timestamp: number) => {
+export const formatTimestamp = (timestamp: number): string => {
   const date = new Date(timestamp * 1000)
   return formatDateToString(date)
 }

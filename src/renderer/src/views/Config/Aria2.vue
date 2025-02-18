@@ -1,6 +1,6 @@
 <template>
   <t-card>
-    <t-form :data="config.aria2" :rules="formRules" @submit="submitForm" :labelWidth="120">
+    <t-form :data="config.aria2" :rules="formRules" :label-width="120" @submit="submitForm">
       <t-form-item name="dir" label="下载位置" @change="triggerChange">
         <SelectDir v-model="config.aria2.dir" />
       </t-form-item>
@@ -24,8 +24,8 @@
       <t-form-item
         name="max-overall-download-limit"
         label="下载限速"
-        @change="triggerChange"
         help="0为不限速"
+        @change="triggerChange"
       >
         <t-input-number v-model="config.aria2['max-overall-download-limit']" :min="0" />
         <span style="margin-left: 10px">MB/s</span>
@@ -73,7 +73,7 @@ const submitForm: FormProps['onSubmit'] = async ({ validateResult }) => {
   restart()
 }
 
-const restart = async () => {
+const restart = async (): Promise<void> => {
   await invoke('aria2.restart')
   MessagePlugin.success('重启Aria2成功')
 }

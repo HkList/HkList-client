@@ -1,5 +1,5 @@
 import { version } from '@/package.json'
-// @ts-ignore
+// @ts-ignore 忽略指纹js
 import run from '@main/utils/fingerprint.js'
 import type { AxiosInstance, AxiosRequestConfig, CustomParamsSerializer, Method } from 'axios'
 import axios from 'axios'

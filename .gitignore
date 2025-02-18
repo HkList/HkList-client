@@ -7,3 +7,4 @@ out
 config
 fingerprint.js
 aria2/aria2.session
+.eslintcache

@@ -98,7 +98,7 @@ export const getFileType = (filename: string): IconList => {
   return 'other'
 }
 
-export const getFileIcon = (filename: string) => {
+export const getFileIcon = (filename: string): string => {
   const fileType = getFileType(filename ?? '')
   return iconList[fileType]
 }

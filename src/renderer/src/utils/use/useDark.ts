@@ -1,7 +1,7 @@
 import { useConfigStore } from '@renderer/stores/config.ts'
 import { storeToRefs } from 'pinia'
 
-function setDark(event: MediaQueryList | MediaQueryListEvent) {
+function setDark(event: MediaQueryList | MediaQueryListEvent): void {
   if (event.matches) {
     document.documentElement.setAttribute('theme-mode', 'dark')
   } else {
@@ -9,7 +9,7 @@ function setDark(event: MediaQueryList | MediaQueryListEvent) {
   }
 }
 
-export const useDark = () => {
+export const useDark = (): void => {
   const configStore = useConfigStore()
   const { config } = storeToRefs(configStore)
   const theme = config.value.general.theme

@@ -17,7 +17,7 @@ export const getConfig = (): Config => {
   }
 }
 
-export const saveConfig = (config: Config) => {
+export const saveConfig = (config: Config): void => {
   writeJsonSync(configFile, config, { spaces: 2 })
 }
 

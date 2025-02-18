@@ -15,6 +15,7 @@ import { rewriteIpcHandle } from '@main/utils/rewriteIpcHandle.ts'
 import { app } from 'electron'
 
 app.disableHardwareAcceleration()
+app.commandLine.appendArgument('--in-process-gpu')
 
 app.whenReady().then(async () => {
   const windows: Windows = {}

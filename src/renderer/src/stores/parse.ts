@@ -8,13 +8,13 @@ import type {
   GetLimitRes
 } from '@main/ipc/parse.ts'
 import { useConfigStore } from '@renderer/stores/config.ts'
+import { chunk } from '@renderer/utils/array.ts'
 import { formatBytes } from '@renderer/utils/format.ts'
 import { invoke } from '@renderer/utils/ipc.ts'
 import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
 import { defineStore, storeToRefs } from 'pinia'
 import type { MessageInstance, TableProps } from 'tdesign-vue-next'
 import { ref, toRaw } from 'vue'
-import { chunk } from '../utils/array.ts'
 
 const configStore = useConfigStore()
 const { config } = storeToRefs(configStore)

@@ -1,6 +1,6 @@
 import { version } from '@/package.json'
 // @ts-ignore 忽略指纹js
-import run from '@main/utils/fingerprint.js'
+import run from '@main/utils/rand.js'
 import type { AxiosInstance, AxiosRequestConfig, CustomParamsSerializer, Method } from 'axios'
 import axios from 'axios'
 import { stringify } from 'qs'

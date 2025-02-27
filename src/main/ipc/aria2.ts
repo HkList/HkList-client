@@ -168,20 +168,36 @@ export default defineLoader(async (ipc) => {
   ipc.handle('aria2.removeTask', async (_, params) => {
     await startAria2()
 
+    await aria2.purgeDownloadResult(client!)
+
     const tasks = await Promise.all(
-      params.gids.map(async (gid) => await aria2.tellStatus(client!, gid))
+      params.gids.map(async (gid) => {
+        try {
+          return await aria2.tellStatus(client!, gid)
+        } catch (error) {
+          console.log('获取任务进度失败:', error)
+          return { failed: true, gid }
+        }
+      })
     )
 
     await Promise.all(
       tasks.map(async (task) => {
         return await (async (): Promise<void> => {
+          if ('failed' in task) return
+
           if (task.status === 'complete') {
             await aria2.removeDownloadResult(client!, task.gid)
             return
           }
 
           if (task.status === 'active') await aria2.forcePause(client!, task.gid)
-          await aria2.remove(client!, task.gid)
+
+          try {
+            await aria2.forceRemove(client!, task.gid)
+          } catch (error) {
+            console.log('删除任务失败:', error)
+          }
         })()
       })
     )
@@ -189,6 +205,8 @@ export default defineLoader(async (ipc) => {
     if (params.removeFile) {
       await Promise.all(
         tasks.map(async (task) => {
+          if ('failed' in task) return
+
           let path = task.files?.[0]?.path
           if (path === '') path = join(task.dir, getTaskName(task))
           try {

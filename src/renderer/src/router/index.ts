@@ -40,6 +40,10 @@ const router = createRouter({
             {
               path: '/config/aria2',
               component: (): RouteComponent => import('@renderer/views/Config/Aria2.vue')
+            },
+            {
+              path: '/config/proxy',
+              component: (): RouteComponent => import('@renderer/views/Config/Proxy.vue')
             }
           ]
         }

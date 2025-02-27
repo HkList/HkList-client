@@ -88,7 +88,9 @@ const {
   GetLimitError,
   GetFileListReq,
   GetFileListRes,
-  vcode
+  vcode,
+  GetDownLoadLinksRes,
+  paths
 } = storeToRefs(parseStore)
 
 const router = useRouter()
@@ -123,6 +125,8 @@ const parseUrl = (): void => {
 const clearDir = (): void => {
   GetFileListReq.value.dir = '/'
   GetFileListRes.value = undefined
+  GetDownLoadLinksRes.value = []
+  paths.value = []
 }
 
 const formRules: FormProps['rules'] = {

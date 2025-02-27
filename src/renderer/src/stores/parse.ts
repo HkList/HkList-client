@@ -14,7 +14,6 @@ import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
 import { defineStore, storeToRefs } from 'pinia'
 import type { MessageInstance, TableProps } from 'tdesign-vue-next'
 import { ref, toRaw } from 'vue'
-import { chunk } from '../utils/array.ts'
 
 const configStore = useConfigStore()
 const { config } = storeToRefs(configStore)
@@ -72,12 +71,12 @@ export const useParseStore = defineStore('parse', () => {
   })
   const GetFileListRes = ref<GetFileListRes>()
 
+  const paths = ref<string[]>([])
+
   // 根据路径生成上一个路径的地址
   const getPreviousPath = (): string => {
-    const newArr = GetFileListReq.value.dir.split('/')
-    newArr.pop()
-    const newPath = newArr.join('/')
-    return newPath === '' ? '/' : newPath
+    if (paths.value.length === 0) return '/'
+    return paths.value[paths.value.length - 2] ?? '/'
   }
 
   const getFileList = async (sample = false): Promise<void> => {
@@ -108,6 +107,8 @@ export const useParseStore = defineStore('parse', () => {
         server_filename: '返回上一层',
         dlink: ''
       })
+    } else {
+      paths.value = []
     }
   }
 
@@ -130,7 +131,7 @@ export const useParseStore = defineStore('parse', () => {
   const getDownloadLinks = async (
     event?: PointerEvent | number,
     row?: File
-  ): Promise<boolean | GetDownLoadLinksRes | undefined> => {
+  ): Promise<boolean | GetDownLoadLinksRes> => {
     if (pending.value) {
       MessagePlugin.error('正在解析中,请稍后再试')
       return false
@@ -141,9 +142,16 @@ export const useParseStore = defineStore('parse', () => {
       selectedRows.value = [row]
     }
 
-    const filteFolders = selectedRows.value.filter((item) => item && !item.is_dir)
+    const isDirFsId: number[] = []
+    const filteFolders = selectedRows.value.filter((item) => {
+      if (item.is_dir) isDirFsId.push(item.fs_id)
+      return item && !item.is_dir
+    })
     if (filteFolders.length !== selectedRows.value.length)
-      MessagePlugin.warning('文件夹不会进行解析,已忽略')
+      MessagePlugin.warning('暂时不支持解析文件夹')
+
+    selectedRows.value = filteFolders
+    selectedRowKeys.value = selectedRowKeys.value.filter((fs_id) => !isDirFsId.includes(fs_id))
 
     const filteMinSingleFilesize = filteFolders.filter(
       (file) => file.size > GetConfigRes.value.min_single_filesize
@@ -162,25 +170,25 @@ export const useParseStore = defineStore('parse', () => {
 
     if (sum > GetConfigRes.value.max_all_filesize) {
       MessagePlugin.error(`单次最多解析${formatBytes(GetConfigRes.value.max_all_filesize)}的文件`)
-      return
+      return false
     }
 
     if (rows.length > GetConfigRes.value.max_once) {
       MessagePlugin.error(`单次最多解析${GetConfigRes.value.max_once}个文件`)
-      return
+      return false
     }
 
     if (rows.length === 0) {
       MessagePlugin.error(`满足要求的文件数量为0`)
-      return
+      return false
     }
 
     try {
       pending.value = true
-      let res: GetDownLoadLinksRes = []
+      vcode.value.hit_captcha = false
 
       if (typeof event === 'number') {
-        res = await invoke('parse.getDownloadLinks', {
+        const res = await invoke('parse.getDownloadLinks', {
           randsk: GetFileListRes.value!.randsk,
           uk: GetFileListRes.value!.uk,
           shareid: GetFileListRes.value!.shareid,
@@ -194,41 +202,56 @@ export const useParseStore = defineStore('parse', () => {
             ? { vcode_str: vcode.value.vcode_str, vcode_input: vcode.value.vcode_input }
             : {})
         })
-      } else {
-        // 把 rows 拆成 5 个一份
-        const chunks = chunk(rows, 5)
-        let message: MessageInstance | null = null
-        for (let i = 0; i < chunks.length; i++) {
-          if (message) message.close()
-          message = await MessagePlugin.info(`正在解析第${i + 1}/${chunks.length}个区块`, 9999999)
-          const chunkRes = await invoke('parse.getDownloadLinks', {
-            randsk: GetFileListRes.value!.randsk,
-            uk: GetFileListRes.value!.uk,
-            shareid: GetFileListRes.value!.shareid,
-            fs_id: chunks[i].map((v) => v.fs_id),
-            surl: GetFileListReq.value.surl,
-            dir: GetFileListReq.value.dir,
-            pwd: GetFileListReq.value.pwd,
-            token: GetLimitReq.value.token,
-            parse_password: GetFileListReq.value.parse_password,
-            ...(vcode.value.hit_captcha
-              ? { vcode_str: vcode.value.vcode_str, vcode_input: vcode.value.vcode_input }
-              : {})
-          })
-          res.push(...chunkRes)
-        }
-        if (message) message.close()
-      }
-
-      if (typeof event === 'number') {
         MessagePlugin.success('重新解析成功')
         return res
       } else {
+        const res: GetDownLoadLinksRes = []
+        let message: MessageInstance | null = null
+        let row: File
+
+        try {
+          for (const index in rows) {
+            row = rows[index]
+
+            if (message) message.close()
+
+            message = await MessagePlugin.loading(
+              `正在解析第${parseFloat(index) + 1}个文件:${row.server_filename}`,
+              9999999
+            )
+
+            const link = await invoke('parse.getDownloadLinks', {
+              randsk: GetFileListRes.value!.randsk,
+              uk: GetFileListRes.value!.uk,
+              shareid: GetFileListRes.value!.shareid,
+              fs_id: [row.fs_id],
+              surl: GetFileListReq.value.surl,
+              dir: GetFileListReq.value.dir,
+              pwd: GetFileListReq.value.pwd,
+              token: GetLimitReq.value.token,
+              parse_password: GetFileListReq.value.parse_password,
+              ...(vcode.value.hit_captcha
+                ? { vcode_str: vcode.value.vcode_str, vcode_input: vcode.value.vcode_input }
+                : {})
+            })
+            res.push(...link)
+
+            // 取消选中
+            if (row === null) continue
+            selectedRowKeys.value = selectedRowKeys.value.filter((item) => item !== row.fs_id)
+            selectedRows.value = selectedRows.value.filter((item) => item.fs_id !== row.fs_id)
+          }
+        } catch (error) {
+          if (message) message.close()
+          GetDownLoadLinksRes.value = res
+          MessagePlugin.success('部分解析成功,下滑查看解析结果')
+          throw error
+        }
+
+        if (message) message.close()
         MessagePlugin.success('解析成功,下滑查看解析结果')
         GetDownLoadLinksRes.value = res
       }
-
-      vcode.value.hit_captcha = false
     } catch (_error) {
       const error = _error as { response: { data: { message: string } } }
       if (error?.response?.data?.message?.includes('-20')) {
@@ -274,6 +297,7 @@ export const useParseStore = defineStore('parse', () => {
     getDownloadLinks,
     GetDownLoadLinksRes,
 
-    vcode
+    vcode,
+    paths
   }
 })

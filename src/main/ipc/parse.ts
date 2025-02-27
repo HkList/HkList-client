@@ -86,7 +86,7 @@ export interface GetDownloadLinksReq {
 }
 
 export type GetDownLoadLinksRes = {
-  message: '请求成功'
+  message: string
   filename: string
   fs_id: number
   ua: string

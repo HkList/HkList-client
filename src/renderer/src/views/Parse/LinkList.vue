@@ -22,7 +22,7 @@
                 <t-space>
                   <t-tag size="large"> 第 {{ index + 1 }} 条 </t-tag>
                   <t-button @click="copy(url)">复制</t-button>
-                  <t-button @click="addAria2Url(row as GetDownLoadLinksResType[number])">
+                  <t-button @click="addAria2Url(row as GetDownLoadLinksResType[number],index)">
                     下载
                   </t-button>
                 </t-space>
@@ -130,11 +130,11 @@ const copyLink = (event: PointerEvent, link: string): void => {
   copy(link)
 }
 
-const addAria2Url = async (row: GetDownLoadLinksResType[number]): Promise<void> => {
+const addAria2Url = async (row: GetDownLoadLinksResType[number], index: number): Promise<void> => {
   if (!row.urls) return
 
   await invoke('aria2.addTask', {
-    urls: [row.urls[0]],
+    urls: [row.urls[index]],
     'user-agent': row.ua
   })
 

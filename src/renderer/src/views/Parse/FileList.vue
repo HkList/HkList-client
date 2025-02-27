@@ -26,7 +26,7 @@ import type { File } from '@main/ipc/parse.ts'
 import { getFileIcon, iconList } from '@renderer/utils/genFileIcon.ts'
 
 const parseStore = useParseStore()
-const { GetFileListReq, GetFileListRes, selectedRowKeys } = storeToRefs(parseStore)
+const { GetFileListReq, GetFileListRes, selectedRowKeys, paths } = storeToRefs(parseStore)
 
 const columns = ref<TableProps['columns']>([
   {
@@ -71,7 +71,10 @@ const columns = ref<TableProps['columns']>([
     cell: (_, { row }): string =>
       row.is_dir ? (
         <>
-          <t-button theme="primary" onClick={(event: PointerEvent) => getDir(event, row.path)}>
+          <t-button
+            theme="primary"
+            onClick={(event: PointerEvent) => getDir(event, row.path, row.category)}
+          >
             打开文件夹
           </t-button>
         </>
@@ -91,10 +94,15 @@ const columns = ref<TableProps['columns']>([
   }
 ])
 
-const getDir = async (event: PointerEvent, path: string): Promise<void> => {
+const getDir = async (event: PointerEvent, path: string, category: number): Promise<void> => {
   event.stopPropagation()
 
   GetFileListReq.value.dir = path
+  if (category === -1) {
+    paths.value.pop()
+  } else {
+    paths.value.push(path)
+  }
   await parseStore.getFileList()
 }
 </script>

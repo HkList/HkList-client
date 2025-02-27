@@ -1,8 +1,10 @@
 import { version } from '@/package.json'
 // @ts-ignore 忽略指纹js
-import run from '@main/utils/fingerprint.js'
+import { nowConfig } from '@main/ipc/config.ts'
+import run from '@main/utils/rand.js'
 import type { AxiosInstance, AxiosRequestConfig, CustomParamsSerializer, Method } from 'axios'
 import axios from 'axios'
+import { HttpsProxyAgent } from 'https-proxy-agent'
 import { stringify } from 'qs'
 
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
@@ -35,6 +37,12 @@ class Http {
   private httpInterceptorsRequest(): void {
     this.axiosInstance.interceptors.request.use(
       (config) => {
+        if (nowConfig.proxy.enable) {
+          config.proxy = false
+          config.httpAgent = new HttpsProxyAgent(nowConfig.proxy.http)
+          config.httpsAgent = new HttpsProxyAgent(nowConfig.proxy.https)
+        }
+
         if (this.isHkList) {
           return run(config)
         } else {

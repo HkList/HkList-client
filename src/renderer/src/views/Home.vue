@@ -31,6 +31,7 @@
       <t-menu-item value="/config/general"> 通用配置 </t-menu-item>
       <t-menu-item value="/config/parse"> 解析配置 </t-menu-item>
       <t-menu-item value="/config/aria2"> Aria2配置 </t-menu-item>
+      <t-menu-item value="/config/proxy"> 代理配置 </t-menu-item>
     </t-submenu>
   </Layout>
 </template>

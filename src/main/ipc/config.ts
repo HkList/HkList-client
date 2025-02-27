@@ -38,6 +38,11 @@ export interface Config {
     split: number
     'max-overall-download-limit': number
   }
+  proxy: {
+    enable: boolean
+    http: string
+    https: string
+  }
 }
 
 export const defaultConfig: Config = {
@@ -56,6 +61,11 @@ export const defaultConfig: Config = {
     'max-concurrent-downloads': 16,
     split: 16,
     'max-overall-download-limit': 0
+  },
+  proxy: {
+    enable: false,
+    http: '',
+    https: ''
   }
 }
 

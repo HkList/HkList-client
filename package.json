@@ -1,6 +1,6 @@
 {
   "name": "hklist-client",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "HkList 客户端程序",
   "main": "./out/main/index.js",
   "author": "huan_kong",

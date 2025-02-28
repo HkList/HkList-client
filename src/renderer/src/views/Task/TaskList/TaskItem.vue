@@ -21,6 +21,9 @@
       <div class="gap-action">
         <t-link v-if="task.status === 'active'" theme="primary" @click="pauseTask"> 暂停 </t-link>
         <t-link v-if="task.status === 'paused'" theme="primary" @click="unpauseTask"> 开始 </t-link>
+        <t-link v-if="task.status === 'complete'" theme="primary" @click="openTaskFile">
+          打开文件
+        </t-link>
 
         <t-link v-if="task.status === 'removed'" theme="primary" @click="removeTaskDownloadResult">
           删除任务
@@ -90,6 +93,10 @@ const openTaskFolder = async (): Promise<void> => {
 
 const selectRadio = (): void => {
   selectedRows.value[task.gid] = selectedRows.value[task.gid] === undefined ? task : undefined
+}
+
+const openTaskFile = async (): Promise<void> => {
+  await invoke('aria2.openTaskFile', { gid: task.gid })
 }
 </script>
 

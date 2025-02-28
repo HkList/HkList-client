@@ -114,6 +114,7 @@ const getDir = async (event: PointerEvent, path: string, category: number): Prom
     height: 30px;
     margin-right: 15px;
     background-size: contain;
+    background-repeat: no-repeat;
   }
 
   .filename {

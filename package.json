@@ -13,7 +13,7 @@
     "typecheck": "npm run lint && npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
     "dev": "chcp.com 65001 && electron-vite dev -w",
-    "build": "npm run typecheck && tsx ./scripts/modify.ts && electron-vite build && tsx ./scripts/recovery.ts",
+    "build": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",

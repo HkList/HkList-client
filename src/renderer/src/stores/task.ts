@@ -23,12 +23,15 @@ export const useTaskStore = defineStore('task', () => {
     stopped.value = res
   }
 
+  const selectedRows = ref<{ [key: string]: Aria2DownloadStatus | undefined }>({})
+
   return {
     active,
     waiting,
     stopped,
     getAcitve,
     getWaiting,
-    getStopped
+    getStopped,
+    selectedRows
   }
 })

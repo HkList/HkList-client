@@ -50,7 +50,7 @@ import { invoke } from '@renderer/utils/ipc.ts'
 import { MessagePlugin } from '@renderer/utils/MessagePlugin.ts'
 
 const parseStore = useParseStore()
-const { GetDownLoadLinksRes } = storeToRefs(parseStore)
+const { GetDownLoadLinksRes, GetFileListRes } = storeToRefs(parseStore)
 
 const columns = ref<TableProps['columns']>([
   {
@@ -133,9 +133,17 @@ const copyLink = (event: PointerEvent, link: string): void => {
 const addAria2Url = async (row: GetDownLoadLinksResType[number], index: number): Promise<void> => {
   if (!row.urls) return
 
+  let filename = row.filename
+  // 查询 path 参数
+  if (row.fs_id && GetFileListRes.value) {
+    const file = GetFileListRes.value.list.find((file) => file.fs_id === row.fs_id)
+    if (file) filename = file.path
+  }
+
   await invoke('aria2.addTask', {
     urls: [row.urls[index]],
-    'user-agent': row.ua
+    'user-agent': row.ua,
+    out: filename
   })
 
   MessagePlugin.success(`文件${row.filename}已开始下载`)

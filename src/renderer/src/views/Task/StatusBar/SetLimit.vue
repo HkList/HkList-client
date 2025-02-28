@@ -2,12 +2,13 @@
   <t-dialog v-model:visible="showDialog" header="设置限速" :footer="false">
     <t-form :data="setLimit" :rules="formRules" @submit="submitForm">
       <t-form-item label="下载速度" name="max-overall-download-limit" help="0为不限速">
-        <t-input-number
-          v-model="setLimit['max-overall-download-limit']"
-          :min="0"
-          :auto-width="true"
-        />
-        <span style="margin-left: 10px">MB/s</span>
+        <t-input-adornment append="MB/s">
+          <t-input-number
+            v-model="setLimit['max-overall-download-limit']"
+            :min="0"
+            :auto-width="true"
+          />
+        </t-input-adornment>
       </t-form-item>
 
       <t-form-item>

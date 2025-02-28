@@ -103,6 +103,7 @@ export interface OpenTaskFolder {
 export default defineLoader(async (ipc) => {
   try {
     await startAria2()
+    await aria2.purgeDownloadResult(client!)
   } catch (_) {
     // ignore
   }

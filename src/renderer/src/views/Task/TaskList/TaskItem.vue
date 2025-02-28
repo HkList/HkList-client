@@ -1,6 +1,7 @@
 <template>
-  <t-list-item>
+  <t-list-item @click="selectRadio">
     <div class="task__taskList__info">
+      <t-radio allow-uncheck :checked="selectedRows[task.gid] !== undefined"></t-radio>
       <img :src="getFileIcon(filename)" class="image" />
       <t-space direction="vertical" class="gap">
         <p>{{ filename }}</p>
@@ -47,9 +48,14 @@ import Progress from '@renderer/components/Progress.vue'
 import { formatBytes } from '@renderer/utils/format.ts'
 import { getFileIcon } from '@renderer/utils/genFileIcon.ts'
 import { invoke } from '@renderer/utils/ipc.ts'
+import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
+import { useTaskStore } from '@renderer/stores/task.ts'
 
 const { task } = defineProps<{ task: Aria2DownloadStatus }>()
+
+const taskStore = useTaskStore()
+const { selectedRows } = storeToRefs(taskStore)
 
 const progress = ref(calcProgress(task))
 const filename = ref(getTaskName(task))
@@ -80,6 +86,10 @@ const removeTaskDownloadResult = async (): Promise<void> => {
 
 const openTaskFolder = async (): Promise<void> => {
   await invoke('aria2.openTaskFolder', { gid: task.gid })
+}
+
+const selectRadio = (): void => {
+  selectedRows.value[task.gid] = selectedRows.value[task.gid] === undefined ? task : undefined
 }
 </script>
 

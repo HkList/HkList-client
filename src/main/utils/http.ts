@@ -1,6 +1,6 @@
 import { version } from '@/package.json'
-// @ts-ignore 忽略指纹js
 import { nowConfig } from '@main/ipc/config.ts'
+// @ts-ignore 忽略指纹js
 import run from '@main/utils/rand.js'
 import type { AxiosInstance, AxiosRequestConfig, CustomParamsSerializer, Method } from 'axios'
 import axios from 'axios'

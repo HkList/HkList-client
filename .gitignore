@@ -4,7 +4,7 @@ out
 .DS_Store
 *.log*
 .env
-config
+config/*
 fingerprint.js
 aria2/aria2.session
 .eslintcache

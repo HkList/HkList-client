@@ -22,7 +22,6 @@ declare module 'vue' {
     THeader: typeof import('tdesign-vue-next')['Header']
     TInput: typeof import('tdesign-vue-next')['Input']
     TInputNumber: typeof import('tdesign-vue-next')['InputNumber']
-    TInputSwitch: typeof import('tdesign-vue-next')['InputSwitch']
     TLayout: typeof import('tdesign-vue-next')['Layout']
     TLink: typeof import('tdesign-vue-next')['Link']
     TList: typeof import('tdesign-vue-next')['List']

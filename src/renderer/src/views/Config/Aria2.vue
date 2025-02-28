@@ -27,8 +27,9 @@
         help="0为不限速"
         @change="triggerChange"
       >
-        <t-input-number v-model="config.aria2['max-overall-download-limit']" :min="0" />
-        <span style="margin-left: 10px">MB/s</span>
+        <t-input-adornment append="MB/s">
+          <t-input-number v-model="config.aria2['max-overall-download-limit']" :min="0" />
+        </t-input-adornment>
       </t-form-item>
 
       <t-form-item>

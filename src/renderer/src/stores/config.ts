@@ -22,6 +22,11 @@ export const useConfigStore = defineStore('config', () => {
       'max-concurrent-downloads': 16,
       split: 16,
       'max-overall-download-limit': 0
+    },
+    proxy: {
+      enable: false,
+      http: '',
+      https: ''
     }
   })
 

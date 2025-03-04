@@ -36,7 +36,7 @@ const complete = ref(0)
 const timer = ref(0)
 
 function process(): void {
-  complete.value += Math.floor(Math.random() * 1)
+  complete.value += Math.floor(Math.random() * 10)
   if (complete.value >= 100) {
     complete.value = 100
     router.push('/')

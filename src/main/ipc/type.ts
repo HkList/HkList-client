@@ -46,6 +46,7 @@ export type BaseIpcEvents = {
   'aria2.removeTask': (params: RemoveTask) => null
   'aria2.removeTaskResult': (params: OperateTask) => null
   'aria2.openTaskFolder': (params: OpenTaskFolder) => null
+  'aria2.openTaskFile': (params: OpenTaskFolder) => null
   'aria2.getGlobalOption': () => Aria2ClientGlobalOptions
   'aria2.changeGlobalOption': (params: Aria2ClientGlobalOptions) => null
 

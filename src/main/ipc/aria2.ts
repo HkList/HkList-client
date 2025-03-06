@@ -254,6 +254,13 @@ export default defineLoader(async (ipc) => {
     return success()
   })
 
+  ipc.handle('aria2.openTaskFile', async (_, params) => {
+    await startAria2()
+    const task = await aria2.tellStatus(client!, params.gid)
+    shell.openPath(task.files[0].path)
+    return success()
+  })
+
   ipc.handle('aria2.getGlobalOption', async () => {
     await startAria2()
     return success(await aria2.getGlobalOption(client!))

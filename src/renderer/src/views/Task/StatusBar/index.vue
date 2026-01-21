@@ -52,25 +52,19 @@ const showAddTask = (): void => {
 
 const pauseAllSelected = async (): Promise<void> => {
   await invoke('aria2.pauseTask', {
-    gids: Object.values(selectedRows.value)
-      .filter((task) => task !== undefined && task.status === 'active')
-      .map((task) => (task as Aria2DownloadStatus).gid)
+    gids: Object.values(selectedRows.value).map((task) => (task as Aria2DownloadStatus).gid)
   })
 }
 
 const unpauseAllSelected = async (): Promise<void> => {
   await invoke('aria2.unpauseTask', {
-    gids: Object.values(selectedRows.value)
-      .filter((task) => task !== undefined && ['paused', 'waiting'].includes(task.status))
-      .map((task) => (task as Aria2DownloadStatus).gid)
+    gids: Object.values(selectedRows.value).map((task) => (task as Aria2DownloadStatus).gid)
   })
 }
 
 const deleteAllSelected = async (removeFile: boolean): Promise<void> => {
   await invoke('aria2.removeTask', {
-    gids: Object.values(selectedRows.value)
-      .filter((task) => task !== undefined && ['paused', 'waiting'].includes(task.status))
-      .map((task) => (task as Aria2DownloadStatus).gid),
+    gids: Object.values(selectedRows.value).map((task) => (task as Aria2DownloadStatus).gid),
     removeFile
   })
 }

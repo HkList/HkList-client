@@ -56,7 +56,8 @@ export const startAria2 = async (): Promise<ChildProcessWithoutNullStreams> => {
         client = await open(
           new WebSocket(`ws://localhost:${nowConfig.aria2['rpc-listen-port']}/jsonrpc`),
           {
-            secret: nowConfig.aria2['rpc-secret']
+            secret: nowConfig.aria2['rpc-secret'],
+            timeout: 114514000
           }
         )
         temp.stdout.removeAllListeners('data')
@@ -156,13 +157,23 @@ export default defineLoader(async (ipc) => {
 
   ipc.handle('aria2.unpauseTask', async (_, params) => {
     await startAria2()
-    await Promise.all(params.gids.map(async (gid) => await aria2.unpause(client!, gid)))
+    await Promise.all(
+      params.gids.map(async (gid) => {
+        const status = await aria2.tellStatus(client!, gid)
+        if (status.status === 'paused') await aria2.unpause(client!, gid)
+      })
+    )
     return success()
   })
 
   ipc.handle('aria2.pauseTask', async (_, params) => {
     await startAria2()
-    await Promise.all(params.gids.map(async (gid) => await aria2.pause(client!, gid)))
+    await Promise.all(
+      params.gids.map(async (gid) => {
+        const status = await aria2.tellStatus(client!, gid)
+        if (status.status === 'active') await aria2.forcePause(client!, gid)
+      })
+    )
     return success()
   })
 
